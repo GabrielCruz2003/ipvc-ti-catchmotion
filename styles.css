@@ -1,0 +1,139 @@
+/* Tokens de cor e tons base da identidade visual. */
+:root {
+  --bg-a: #041e33;
+  --bg-b: #0a395a;
+  --bg-c: #09111a;
+  --text-strong: #ecf5fb;
+  --text-soft: #adc9da;
+  --line: rgba(184, 230, 255, 0.2);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  /* Fundo em camadas para dar profundidade ao ecra inicial. */
+  color: var(--text-strong);
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 14% 12%, rgba(89, 231, 255, 0.2) 0%, transparent 36%),
+    radial-gradient(circle at 86% 78%, rgba(66, 255, 177, 0.14) 0%, transparent 36%),
+    linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 45%, var(--bg-c) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.app-shell {
+  /* Contentor principal que centraliza cabecalho e zona de jogo. */
+  width: min(1610px, 99vw);
+  text-align: center;
+  padding: 22px 12px 24px;
+}
+
+.app-header {
+  margin: 0 auto 16px;
+  padding: 10px 14px 0;
+  width: min(900px, 96%);
+}
+
+.app-kicker {
+  display: inline-block;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  color: #bde7f7;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(10, 28, 44, 0.36);
+}
+
+h1 {
+  margin: 10px 0 6px;
+  font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+  font-size: clamp(2rem, 2.8vw, 2.9rem);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: clamp(0.95rem, 1.45vw, 1.05rem);
+}
+
+#app {
+  position: relative;
+  width: 100%;
+}
+
+#p5_loading {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(184, 230, 255, 0.35);
+  background: rgba(6, 23, 36, 0.86);
+  color: #d8f2ff;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  transition: opacity 180ms ease;
+}
+
+#p5_loading.is-done {
+  opacity: 0;
+}
+
+.stage-card {
+  /* Moldura do palco onde o canvas do p5 e apresentado. */
+  border-radius: 24px;
+  padding: 10px;
+  border: 1px solid rgba(178, 226, 252, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(3, 19, 31, 0.45);
+  box-shadow:
+    0 28px 58px rgba(0, 0, 0, 0.34),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+canvas {
+  /* Ajuste responsivo do canvas sem perder proporcao original. */
+  display: block;
+  margin: 0 auto;
+  width: min(1560px, 98vw) !important;
+  height: auto !important;
+  border-radius: 18px;
+  border: 1px solid rgba(185, 229, 255, 0.16);
+  box-shadow:
+    0 24px 44px rgba(1, 8, 14, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+@media (max-width: 900px) {
+  /* Pequenos ajustes de espacamento para ecras mais estreitos. */
+  .app-shell {
+    padding-top: 14px;
+  }
+
+  .app-header {
+    margin-bottom: 12px;
+  }
+
+  .stage-card {
+    border-radius: 18px;
+    padding: 8px;
+  }
+}
