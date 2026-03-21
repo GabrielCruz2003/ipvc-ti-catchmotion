@@ -219,9 +219,41 @@ function keyPressed() {
 function mousePressed() {
   garantirVozAtiva();
 
+  if (estadoApp === ESTADO_APP.END) {
+    const restartFimBox = {
+      x: layout.camW * 0.5 - 165,
+      y: 390,
+      w: 330,
+      h: 72
+    };
+
+    if (pontoDentroRetangulo(mouseX, mouseY, restartFimBox)) {
+      iniciarExercicio();
+      return;
+    }
+
+    if (botoesDificuldadeFim.length) {
+      const clickedEnd = botoesDificuldadeFim.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+      if (clickedEnd) {
+        definirDificuldade(clickedEnd.level);
+        return;
+      }
+    }
+  }
+
   if (estadoApp === ESTADO_APP.CONFIG && pontoDentroRetangulo(mouseX, mouseY, botaoIniciar)) {
     iniciarExercicio();
     return;
+  }
+
+  if (estadoApp === ESTADO_APP.CONFIG && botoesDificuldadeInicio.length) {
+    const clickedStartDifficulty = botoesDificuldadeInicio.find((btn) =>
+      pontoDentroRetangulo(mouseX, mouseY, btn)
+    );
+    if (clickedStartDifficulty) {
+      definirDificuldade(clickedStartDifficulty.level);
+      return;
+    }
   }
 
   if (estadoApp === ESTADO_APP.EXERCISE) {
@@ -259,25 +291,6 @@ function mousePressed() {
     }
   }
 
-  if (estadoApp === ESTADO_APP.END && botoesDificuldadeFim.length) {
-    const restartFimBox = {
-      x: layout.camW * 0.5 - 165,
-      y: 390,
-      w: 330,
-      h: 72
-    };
-    if (pontoDentroRetangulo(mouseX, mouseY, restartFimBox)) {
-      estadoApp = ESTADO_APP.CONFIG;
-      reiniciarSessao();
-      return;
-    }
-
-    const clickedEnd = botoesDificuldadeFim.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
-    if (clickedEnd) {
-      definirDificuldade(clickedEnd.level);
-      return;
-    }
-  }
 }
 
 // Altera dificuldade e recalcula o tempo total da sessao.
@@ -373,27 +386,25 @@ function processarComandoVoz(textoNormalizado) {
   const comandoTerminar = contemAlgumComando(textoNormalizado, ["terminar", "parar", "acabar", "finalizar"]);
   const comandoReiniciar = contemAlgumComando(textoNormalizado, ["reiniciar", "recomecar", "recomecar"]);
 
-  if (comandoReiniciar) {
-    ultimoComandoVoz = "Reiniciar";
-
-    if (estadoApp === ESTADO_APP.EXERCISE) {
-      iniciarExercicio();
-    } else {
-      estadoApp = ESTADO_APP.CONFIG;
-      reiniciarSessao();
-    }
-
-    estadoVoz = "Comando: reiniciar";
-    return;
-  }
-
   if (comandoTerminar) {
     ultimoComandoVoz = "Terminar";
     if (estadoApp === ESTADO_APP.EXERCISE) {
       estadoApp = ESTADO_APP.END;
       estadoVoz = "Comando: terminar";
     } else {
-      estadoVoz = "Comando de terminar disponivel durante o exercicio";
+      estadoVoz = "'Terminar' apenas durante o exercicio";
+    }
+    return;
+  }
+
+  if (comandoReiniciar) {
+    ultimoComandoVoz = "Reiniciar";
+
+    if (estadoApp === ESTADO_APP.END) {
+      iniciarExercicio();
+      estadoVoz = "Comando: reiniciar";
+    } else {
+      estadoVoz = "'Reiniciar' apenas no ecra final";
     }
     return;
   }
@@ -401,11 +412,11 @@ function processarComandoVoz(textoNormalizado) {
   if (comandoIniciar) {
     ultimoComandoVoz = "Iniciar";
 
-    if (estadoApp !== ESTADO_APP.EXERCISE) {
+    if (estadoApp === ESTADO_APP.CONFIG) {
       iniciarExercicio();
       estadoVoz = "Comando: iniciar";
     } else {
-      estadoVoz = "Exercicio ja iniciado";
+      estadoVoz = "'Iniciar' apenas no ecra inicial";
     }
     return;
   }

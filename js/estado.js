@@ -122,6 +122,7 @@ const botoesCamara = {
   finish: null
 };
 let botoesDificuldade = [];
+let botoesDificuldadeInicio = [];
 let botoesDificuldadeFim = [];
 
 let reconhecedorVoz = null;

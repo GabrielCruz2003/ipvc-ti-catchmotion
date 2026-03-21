@@ -51,6 +51,7 @@ function desenharEcraConfiguracao(handInfos) {
   const centerX = layout.camW * 0.5;
   const centerY = height * 0.5;
   const yInicio = 442;
+  const yDificuldade = yInicio - 70;
 
   fill(5, 15, 24, 148);
   noStroke();
@@ -80,13 +81,15 @@ function desenharEcraConfiguracao(handInfos) {
   textSize(27);
   text("Iniciar", centerX, yInicio + 20);
 
+  desenharSeletorDificuldadeInicio(handInfos, centerX, yDificuldade);
+
   fill(217, 234, 244);
   textSize(15);
-  text("Clique em Iniciar, aponte para o botao, gesto OK, mao no centro ou voz", centerX, 506);
+  text("Clique em Iniciar, aponte para o botao, gesto OK, mao no centro ou voz", centerX, 518);
 
   fill(241, 214, 120);
   textSize(14);
-  text("Veja modo, dificuldade e estado no painel lateral", centerX, 530);
+  text("Escolha dificuldade aqui ou no painel lateral", centerX, 542);
 
   const hasHands = handInfos.length > 0;
   const handInCenter = handInfos.find((h) => {
@@ -153,6 +156,73 @@ function desenharEcraConfiguracao(handInfos) {
   if (framesSegurarBotaoMao >= 32) {
     iniciarExercicio();
   }
+}
+
+function desenharSeletorDificuldadeInicio(handInfos, centerX, y) {
+  const w = 112;
+  const h = 38;
+  const gap = 10;
+  const total = w * 3 + gap * 2;
+  const x0 = centerX - total * 0.5;
+
+  fill(225, 241, 251);
+  textAlign(CENTER, TOP);
+  textSize(15);
+  text("Escolha a dificuldade", centerX, y - 28);
+
+  botoesDificuldadeInicio = [
+    { level: DIFICULDADE.FACIL, x: x0, y, w, h },
+    { level: DIFICULDADE.MEDIO, x: x0 + w + gap, y, w, h },
+    { level: DIFICULDADE.DIFICIL, x: x0 + (w + gap) * 2, y, w, h }
+  ];
+
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[0], "Facil");
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[1], "Medio");
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[2], "Dificil");
+
+  let hoveredByHand = null;
+  for (const handInfo of handInfos) {
+    const gestoDeliberado = handInfo.isOK || !handInfo.isGrabbingStrong;
+    if (!gestoDeliberado) continue;
+
+    const alvo = botoesDificuldadeInicio.find(
+      (btn) =>
+        pontoDentroRetangulo(handInfo.indexX, handInfo.indexY, btn) ||
+        pontoDentroRetangulo(handInfo.palmX, handInfo.palmY, btn)
+    );
+    if (alvo) {
+      hoveredByHand = alvo.level;
+      break;
+    }
+  }
+
+  if (hoveredByHand == null) return;
+
+  const hoveredBtn = botoesDificuldadeInicio.find((btn) => btn.level === hoveredByHand);
+  if (hoveredBtn) {
+    noFill();
+    stroke(255, 255, 255, 210);
+    strokeWeight(2);
+    rect(hoveredBtn.x - 3, hoveredBtn.y - 3, hoveredBtn.w + 6, hoveredBtn.h + 6, 10);
+    noStroke();
+  }
+}
+
+function desenharBotaoDificuldadeInicio(btn, label) {
+  const isActive = nivelDificuldade === btn.level;
+  const isHovered = pontoDentroRetangulo(mouseX, mouseY, btn);
+
+  const base = isActive ? color(57, 199, 145) : color(255, 255, 255, 28);
+  const drawColor = isHovered ? lerpColor(base, color(255), 0.14) : base;
+
+  noStroke();
+  fill(drawColor);
+  rect(btn.x, btn.y, btn.w, btn.h, 8);
+
+  fill(isActive ? color(7, 44, 27) : color(225));
+  textAlign(CENTER, CENTER);
+  textSize(14);
+  text(label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.54);
 }
 
 // Rasto visual do dedo no modo trajeto (bom vs fora da linha).
@@ -227,9 +297,8 @@ function desenharEcraFinal(handInfos) {
     const p = constrain(framesSegurarReiniciarFim / 30, 0, 1);
     desenharAnelProgresso(restartHand.palmX, restartHand.palmY, p, color(58, 204, 124));
     if (framesSegurarReiniciarFim > 30) {
-      estadoApp = ESTADO_APP.CONFIG;
+      iniciarExercicio();
       framesSegurarReiniciarFim = 0;
-      reiniciarSessao();
     }
   } else {
     framesSegurarReiniciarFim = 0;
