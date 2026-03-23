@@ -1,9 +1,9 @@
-// Carrega o modelo de deteccao de maos antes do setup.
+// Carrega o modelo de deteção de mãos antes do setup.
 function preload() {
   handPose = ml5.handPose();
 }
 
-// Inicializa canvas, camara, deteccao de maos, voz e sessao.
+// Inicializa canvas, câmara, deteção de mãos, voz e sessão.
 function setup() {
   const canvas = createCanvas(layout.totalW, layout.totalH);
   canvas.parent("app");

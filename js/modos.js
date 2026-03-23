@@ -1,4 +1,4 @@
-// Executa o modo ativo e atualiza assistencia/feedback visual.
+// Executa o modo ativo e atualiza assistência/feedback visual.
 function executarExercicio(handInfos) {
   if (obterModoAtual() === MODO.BOLAS) {
     executarModoBolas(handInfos);
@@ -17,7 +17,7 @@ function executarExercicio(handInfos) {
   detetarInatividadeDica(handInfos);
 }
 
-// Atualiza fisica das bolas, captura por mao e pontuacao.
+// Atualiza física das bolas, captura por mão e pontuação.
 function executarModoBolas(handInfos) {
   const perfil = PERFIL_DIFICULDADE[nivelDificuldade];
   garantirQuantidadeBolas(perfil.quantidadeBolas);
@@ -64,10 +64,10 @@ function executarModoBolas(handInfos) {
   fill(255);
   textAlign(LEFT, TOP);
   textSize(18);
-  text("Feche a mao para apanhar as bolas", 40, 30);
+  text("Feche a mão para apanhar as bolas", 40, 30);
 }
 
-// Avalia o seguimento do trajeto com dedo indicador e calcula precisao.
+// Avalia o seguimento do trajeto com dedo indicador e calcula precisão.
 function executarModoTrajeto(handInfos) {
   if (pontosTrajeto.length === 0) {
     gerarTrajeto();
@@ -128,7 +128,7 @@ function executarModoTrajeto(handInfos) {
   text("Siga o caminho com o dedo indicador", 40, 30);
 }
 
-// Posiciona e relanca uma bola com nova velocidade aleatoria.
+// Posiciona e relança uma bola com nova velocidade aleatória.
 function reposicionarBola(ball) {
   ball.x = random(70, layout.camW - 70);
   ball.y = random(70, height - 70);
@@ -136,7 +136,7 @@ function reposicionarBola(ball) {
   ball.vy = random(-1.7, 1.7);
 }
 
-// Garante o numero de bolas esperado para a dificuldade atual.
+// Garante o número de bolas esperado para a dificuldade atual.
 function garantirQuantidadeBolas(target) {
   while (bolas.length < target) {
     const ball = { x: 0, y: 0, r: random(28, 38), vx: 0, vy: 0 };
@@ -146,7 +146,7 @@ function garantirQuantidadeBolas(target) {
   while (bolas.length > target) bolas.pop();
 }
 
-// Gera um caminho segmentado entre ancoras aleatorias.
+// Gera um caminho segmentado entre âncoras aleatórias.
 function gerarTrajeto() {
   pontosTrajeto = [];
 
@@ -174,7 +174,7 @@ function gerarTrajeto() {
   progressoTrajeto = 0;
 }
 
-// Distancia minima de um ponto a uma lista de pontos.
+// Distância mínima de um ponto a uma lista de pontos.
 function distanciaPontoMaisProximo(point, points) {
   let minDist = Infinity;
   for (const p of points) {
@@ -184,7 +184,7 @@ function distanciaPontoMaisProximo(point, points) {
   return minDist;
 }
 
-// Repoe pontuacoes, colecoes e timers para comecar limpo.
+// Repõe pontuações, coleções e timers para começar limpo.
 function reiniciarSessao() {
   pontuacaoBolas = 0;
   errosTrajeto = 0;
@@ -213,7 +213,7 @@ function reiniciarSessao() {
   assistencia.lastPalm = null;
 }
 
-// Entra no estado de exercicio e inicializa a nova ronda.
+// Entra no estado de exercício e inicializa a nova ronda.
 function iniciarExercicio() {
   estadoApp = ESTADO_APP.EXERCISE;
   inicioMillis = millis();
@@ -248,13 +248,13 @@ function obterModoAtual() {
 // Texto orientador exibido no painel para cada estado/modo.
 function obterInstrucaoAtual() {
   if (estadoApp === ESTADO_APP.CONFIG) {
-    return "Escolha modo e nivel\nClique em Iniciar ou use gesto\nMao no centro tambem inicia";
+    return "Escolha modo e nível\nClique em Iniciar ou use gesto\nMão no centro também inicia";
   }
   if (estadoApp === ESTADO_APP.END) {
-    return "Sessao concluida\nFeche a mao em Reiniciar\nou use voz: reiniciar";
+    return "Sessão concluída\nFeche a mão em Reiniciar\nou use voz: reiniciar";
   }
   if (obterModoAtual() === MODO.BOLAS) {
-    return "Aproxime a palma da bola\nFeche a mao para agarrar\nCada captura soma 1 ponto";
+    return "Aproxime a palma da bola\nFeche a mão para agarrar\nCada captura soma 1 ponto";
   }
-  return "Use o dedo indicador\nMantenha-se na linha guia\nEvite desvios para maior precisao";
+  return "Use o dedo indicador\nMantenha-se na linha guia\nEvite desvios para maior precisão";
 }

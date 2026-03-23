@@ -1,4 +1,4 @@
-// Fundo dinamico com gradiente vertical e grelha subtil.
+// Fundo dinâmico com gradiente vertical e grelha subtil.
 function desenharFundo() {
   for (let y = 0; y < height; y += 2) {
     const t = map(y, 0, height, 0, 1);
@@ -15,7 +15,7 @@ function desenharFundo() {
   }
 }
 
-// Mostra feed da camara espelhado e recortado com cantos arredondados.
+// Mostra feed da câmara espelhado e recortado com cantos arredondados.
 function desenharVideoEspelhado() {
   push();
   drawingContext.save();
@@ -46,7 +46,7 @@ function desenharVideoEspelhado() {
   );
 }
 
-// Ecra inicial com instrucoes, botao e ativacao por gesto.
+// Ecrã inicial com instruções, botão e ativação por gesto.
 function desenharEcraConfiguracao(handInfos) {
   const centerX = layout.camW * 0.5;
   const centerY = height * 0.5;
@@ -67,7 +67,7 @@ function desenharEcraConfiguracao(handInfos) {
 
   textSize(19);
   fill(198, 225, 242);
-  text("Sistema de Fisioterapia e Reabilitacao", centerX, 145);
+  text("Sistema de Fisioterapia e Reabilitação", centerX, 145);
 
   desenharGuiaCorpo(centerX, centerY + 6);
 
@@ -85,7 +85,7 @@ function desenharEcraConfiguracao(handInfos) {
 
   fill(217, 234, 244);
   textSize(15);
-  text("Clique em Iniciar, aponte para o botao, gesto OK, mao no centro ou voz", centerX, 518);
+  text("Clique em Iniciar, aponte para o botão, gesto OK, mão no centro ou voz", centerX, 518);
 
   fill(241, 214, 120);
   textSize(14);
@@ -107,13 +107,13 @@ function desenharEcraConfiguracao(handInfos) {
   if (!rastreioMaoPronto) {
     fill(250, 222, 128);
     textSize(15);
-    text("A iniciar deteccao de maos... aguarde 1-2 segundos", centerX, 558);
+    text("A iniciar deteção de mãos... aguarde 1-2 segundos", centerX, 558);
   }
 
   if (!hasHands && rastreioMaoPronto) {
     fill(250, 222, 128);
     textSize(15);
-    text("Aproxime a mao da camara e mantenha-a visivel", centerX, 558);
+    text("Aproxime a mão da câmara e mantenha-a visível", centerX, 558);
   }
 
   if (okHand) {
@@ -176,9 +176,9 @@ function desenharSeletorDificuldadeInicio(handInfos, centerX, y) {
     { level: DIFICULDADE.DIFICIL, x: x0 + (w + gap) * 2, y, w, h }
   ];
 
-  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[0], "Facil");
-  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[1], "Medio");
-  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[2], "Dificil");
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[0], "Fácil");
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[1], "Médio");
+  desenharBotaoDificuldadeInicio(botoesDificuldadeInicio[2], "Difícil");
 
   let hoveredByHand = null;
   for (const handInfo of handInfos) {
@@ -237,7 +237,7 @@ function desenharRasto() {
   }
 }
 
-// Barra inferior de progresso do avancar no trajeto.
+// Barra inferior de progresso do avançar no trajeto.
 function desenharAlvoTrajeto() {
   const x = 35 + (layout.camW - 90) * constrain(progressoTrajeto, 0, 1);
   const y = height - 35;
@@ -251,7 +251,7 @@ function desenharAlvoTrajeto() {
   circle(x, y, 15);
 }
 
-// Ecra final com resultados e reinicio por gesto junto ao botao.
+// Ecrã final com resultados e reinício por gesto junto ao botão.
 function desenharEcraFinal(handInfos) {
   fill(0, 0, 0, 125);
   noStroke();
@@ -260,12 +260,12 @@ function desenharEcraFinal(handInfos) {
   fill(255);
   textAlign(CENTER, TOP);
   textSize(36);
-  text("Sessao concluida", layout.camW * 0.5, 122);
+  text("Sessão concluída", layout.camW * 0.5, 122);
 
   textSize(24);
   text("Bolas apanhadas: " + pontuacaoBolas, layout.camW * 0.5, 214);
   text("");
-  text("Precisao media: " + precisaoMovimento + "%", layout.camW * 0.5, 294);
+  text("Precisão média: " + precisaoMovimento + "%", layout.camW * 0.5, 294);
   text("Tempo restante: " + segundosRestantes + "s", layout.camW * 0.5, 334);
 
   const restartBox = {
@@ -283,7 +283,7 @@ function desenharEcraFinal(handInfos) {
 
   fill(235);
   textSize(15);
-  text("Aproxime a mao ao botao e segure 1s", layout.camW * 0.5, 474);
+  text("Aproxime a mão ao botão e segure 1s", layout.camW * 0.5, 474);
 
   const restartHand = handInfos.find((h) => {
     const palmInside = pontoDentroRetangulo(h.palmX, h.palmY, restartBox);
@@ -307,7 +307,7 @@ function desenharEcraFinal(handInfos) {
   desenharSeletorDificuldadeFim(handInfos);
 }
 
-// Controlos rapidos na area da camara com interacao por dedo (segurar).
+// Controlos rápidos na área da câmara com interação por dedo (segurar).
 function obterGeometriaControlosCamara() {
   const y = layout.framePad + 86;
   const gap = 10;
@@ -333,7 +333,7 @@ function obterGeometriaControlosCamara() {
   return { restartBtn, finishBtn };
 }
 
-// Controlos rapidos na area da camara com interacao por dedo (segurar).
+// Controlos rápidos na área da câmara com interação por dedo (segurar).
 function desenharControlosCamara(handInfos) {
   if (estadoApp !== ESTADO_APP.EXERCISE) return;
 
@@ -430,7 +430,7 @@ function desenharControlosCamara(handInfos) {
   }
 }
 
-// Mostra o tempo restante no canto superior direito da area da camara.
+// Mostra o tempo restante no canto superior direito da área da câmara.
 function desenharTempoRestanteCamara() {
   if (estadoApp === ESTADO_APP.CONFIG) return;
 
@@ -461,7 +461,7 @@ function desenharBadgeCamaraInfo(x, y, w, h, titulo, valor) {
   text(valor, x + w * 0.5, y + 30);
 }
 
-// Seletor de dificuldade no fim da sessao com suporte a clique e dedo.
+// Seletor de dificuldade no fim da sessão com suporte a clique e dedo.
 function desenharSeletorDificuldadeFim(handInfos) {
   const y = 540;
   const w = 108;
@@ -473,7 +473,7 @@ function desenharSeletorDificuldadeFim(handInfos) {
   fill(220);
   textAlign(CENTER, TOP);
   textSize(14);
-  text("Dificuldade para proxima sessao", layout.camW * 0.5, y - 28);
+  text("Dificuldade para próxima sessão", layout.camW * 0.5, y - 28);
 
   botoesDificuldadeFim = [
     { level: DIFICULDADE.FACIL, x: x0, y, w, h },
@@ -481,9 +481,9 @@ function desenharSeletorDificuldadeFim(handInfos) {
     { level: DIFICULDADE.DIFICIL, x: x0 + (w + gap) * 2, y, w, h }
   ];
 
-  desenharBotaoDificuldadeFim(botoesDificuldadeFim[0], "Facil");
-  desenharBotaoDificuldadeFim(botoesDificuldadeFim[1], "Medio");
-  desenharBotaoDificuldadeFim(botoesDificuldadeFim[2], "Dificil");
+  desenharBotaoDificuldadeFim(botoesDificuldadeFim[0], "Fácil");
+  desenharBotaoDificuldadeFim(botoesDificuldadeFim[1], "Médio");
+  desenharBotaoDificuldadeFim(botoesDificuldadeFim[2], "Difícil");
 
   let hoveredByHand = null;
   for (const handInfo of handInfos) {
@@ -544,7 +544,7 @@ function desenharBotaoDificuldadeFim(btn, label) {
   text(label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.54);
 }
 
-// Painel lateral com instrucoes, controlos e metricas da sessao.
+// Painel lateral com instruções, controlos e métricas da sessão.
 function desenharPainelDireito(handInfos) {
   push();
   translate(layout.panelX, 0);
@@ -561,14 +561,14 @@ function desenharPainelDireito(handInfos) {
   textSize(22);
   text("Painel", 22, 18);
 
-  desenharBlocoPainel(blockX, 60, blockW, 126, "Instrucoes", obterInstrucaoAtual());
+  desenharBlocoPainel(blockX, 60, blockW, 126, "Instruções", obterInstrucaoAtual());
   desenharBlocoControlos(handInfos, blockX, blockW);
   desenharBlocoPainel(
     blockX,
     398,
     blockW,
     112,
-    "Monitorizacao",
+    "Monitorização",
     obterConteudoMonitorizacaoPainel()
   );
   desenharBlocoPainel(
@@ -583,7 +583,7 @@ function desenharPainelDireito(handInfos) {
   pop();
 }
 
-// Texto de monitorizacao que muda entre configuracao e exercicio.
+// Texto de monitorização que muda entre configuração e exercício.
 function obterConteudoMonitorizacaoPainel() {
   if (estadoApp === ESTADO_APP.CONFIG) {
     return (
@@ -591,7 +591,7 @@ function obterConteudoMonitorizacaoPainel() {
       obterModoAtual() +
       "\nDificuldade: " +
       NOMES_DIFICULDADE[nivelDificuldade] +
-      "\nDuracao: " +
+      "\nDuração: " +
       floor(DURACAO_EXERCICIO_POR_DIFICULDADE[nivelDificuldade] / 60) +
       " min"
     );
@@ -600,22 +600,22 @@ function obterConteudoMonitorizacaoPainel() {
   return (
     "Tempo restante: " +
     segundosRestantes +
-    "s\nPrecisao: " +
+    "s\nPrecisão: " +
     precisaoMovimento +
-    "%\nNivel: " +
+    "%\nNível: " +
     NOMES_DIFICULDADE[nivelDificuldade]
   );
 }
 
-// Texto de estado/camara/voz ou resultados finais simplificados.
+// Texto de estado/câmara/voz ou resultados finais simplificados.
 function obterConteudoResultadosPainel(handInfos) {
   if (estadoApp === ESTADO_APP.CONFIG) {
     const handCount = handInfos.length;
     const trackingState = rastreioMaoPronto ? "Pronto" : "A iniciar";
     return (
-      "Camara: " +
+      "Câmara: " +
       trackingState +
-      "\nMaos detetadas: " +
+      "\nMãos detetadas: " +
       handCount +
       "\nVoz: " +
       estadoVoz
@@ -625,7 +625,7 @@ function obterConteudoResultadosPainel(handInfos) {
   return "Bolas: " + pontuacaoBolas;
 }
 
-// Cartao base reutilizavel para blocos do painel lateral.
+// Cartão base reutilizável para blocos do painel lateral.
 function desenharBlocoPainel(x, y, w, h, title, content) {
   fill(255, 255, 255, 30);
   noStroke();
@@ -641,7 +641,7 @@ function desenharBlocoPainel(x, y, w, h, title, content) {
   text(content, x + 12, y + 38);
 }
 
-// Bloco de botoes (reiniciar/terminar) e seletor de dificuldade.
+// Bloco de botões (reiniciar/terminar) e seletor de dificuldade.
 function desenharBlocoControlos(handInfos, x, w) {
   const y = 200;
   const h = 188;
@@ -718,8 +718,8 @@ function desenharBlocoControlos(handInfos, x, w) {
   const allowGesturePanelControl = estadoApp === ESTADO_APP.EXERCISE && obterModoAtual() !== MODO.BOLAS;
   if (allowGesturePanelControl && handInfos.length > 0) {
     for (const handInfo of handInfos) {
-      // Evita ativacoes acidentais: so aceita controlo com gesto OK
-      // e com a mao proxima da lateral direita da camara.
+      // Evita ativações acidentais: só aceita controlo com gesto OK
+      // e com a mão próxima da lateral direita da câmara.
       const inControlEdge = handInfo.palmX > layout.camW - 140;
       if (!handInfo.isOK || !inControlEdge) continue;
 
@@ -758,9 +758,9 @@ function desenharBlocoControlos(handInfos, x, w) {
   text("Dificuldade", x + 10, selectorY - 16);
 
   const podeMudarDificuldade = estadoApp !== ESTADO_APP.EXERCISE;
-  desenharBotaoSeletorDificuldade(botoesDificuldade[0], "Facil", podeMudarDificuldade);
-  desenharBotaoSeletorDificuldade(botoesDificuldade[1], "Medio", podeMudarDificuldade);
-  desenharBotaoSeletorDificuldade(botoesDificuldade[2], "Dificil", podeMudarDificuldade);
+  desenharBotaoSeletorDificuldade(botoesDificuldade[0], "Fácil", podeMudarDificuldade);
+  desenharBotaoSeletorDificuldade(botoesDificuldade[1], "Médio", podeMudarDificuldade);
+  desenharBotaoSeletorDificuldade(botoesDificuldade[2], "Difícil", podeMudarDificuldade);
 
   if (estadoApp !== ESTADO_APP.EXERCISE) {
     acaoSegurarPainel = null;
@@ -811,7 +811,7 @@ function desenharBlocoControlos(handInfos, x, w) {
   }
 }
 
-// Botao generico do painel com estados hover e ativo.
+// Botão genérico do painel com estados hover e ativo.
 function drawButton(btn, label, c, state = {}) {
   const isHovered = !!state.isHovered;
   const isActive = !!state.isActive;
@@ -840,7 +840,7 @@ function drawButton(btn, label, c, state = {}) {
   text(label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.5);
 }
 
-// Botao do seletor de dificuldade (ativo, inativo e hover).
+// Botão do seletor de dificuldade (ativo, inativo e hover).
 function desenharBotaoSeletorDificuldade(btn, label, enabled) {
   const isActive = nivelDificuldade === btn.level;
   const isHovered = pontoDentroRetangulo(mouseX, mouseY, btn) && enabled;
@@ -858,7 +858,7 @@ function desenharBotaoSeletorDificuldade(btn, label, enabled) {
   text(label, btn.x - layout.panelX + btn.w * 0.5, btn.y + btn.h * 0.54);
 }
 
-// Silhueta guia para posicionamento corporal no ecra inicial.
+// Silhueta guia para posicionamento corporal no ecrã inicial.
 function desenharGuiaCorpo(cx, cy) {
   stroke(255, 255, 255, 180);
   strokeWeight(3);
@@ -875,7 +875,7 @@ function desenharGuiaCorpo(cx, cy) {
   ellipse(cx, cy - 34, 210, 104);
 }
 
-// Renderiza esqueleto de mao com keypoints espelhados da camara.
+// Renderiza esqueleto de mão com keypoints espelhados da câmara.
 function desenharEsqueletoMao() {
   if (!hands.length) return;
 
@@ -914,7 +914,7 @@ function desenharEsqueletoMao() {
   }
 }
 
-// Cursor circular para realcar ponto de interacao da mao/dedo.
+// Cursor circular para realçar ponto de interação da mão/dedo.
 function desenharCursorMao(x, y, good) {
   noFill();
   stroke(good ? color(37, 235, 132) : color(255, 107, 107));
@@ -938,7 +938,7 @@ function desenharAnelProgresso(x, y, p, c) {
   arc(x, y, 48, 48, -HALF_PI, -HALF_PI + TWO_PI * p);
 }
 
-// Overlay inferior com dicas contextuais de assistencia.
+// Overlay inferior com dicas contextuais de assistência.
 function desenharOverlayDica() {
   if (!assistencia.tip || millis() > assistencia.until) return;
 

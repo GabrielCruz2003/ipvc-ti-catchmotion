@@ -16,7 +16,7 @@ body {
 }
 
 body {
-  /* Fundo em camadas para dar profundidade ao ecra inicial. */
+  /* Fundo em camadas para dar profundidade ao ecrã inicial. */
   color: var(--text-strong);
   font-family: "Manrope", "Segoe UI", sans-serif;
   background:
@@ -31,7 +31,7 @@ body {
 }
 
 .app-shell {
-  /* Contentor principal que centraliza cabecalho e zona de jogo. */
+  /* Contentor principal que centraliza cabeçalho e zona de jogo. */
   width: min(1610px, 99vw);
   text-align: center;
   padding: 22px 12px 24px;
@@ -97,7 +97,7 @@ p {
 }
 
 .stage-card {
-  /* Moldura do palco onde o canvas do p5 e apresentado. */
+  /* Moldura do palco onde o canvas do p5 é apresentado. */
   border-radius: 24px;
   padding: 10px;
   border: 1px solid rgba(178, 226, 252, 0.22);
@@ -110,7 +110,7 @@ p {
 }
 
 canvas {
-  /* Ajuste responsivo do canvas sem perder proporcao original. */
+  /* Ajuste responsivo do canvas sem perder proporção original. */
   display: block;
   margin: 0 auto;
   width: min(1560px, 98vw) !important;
@@ -123,7 +123,7 @@ canvas {
 }
 
 @media (max-width: 900px) {
-  /* Pequenos ajustes de espacamento para ecras mais estreitos. */
+  /* Pequenos ajustes de espaçamento para ecrãs mais estreitos. */
   .app-shell {
     padding-top: 14px;
   }

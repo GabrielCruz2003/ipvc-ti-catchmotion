@@ -1,4 +1,4 @@
-// Callback do ml5: guarda ate 2 maos detetadas no frame atual.
+// Callback do ml5: guarda até 2 mãos detetadas no frame atual.
 function receberMaos(results) {
   if (!rastreioMaoPronto && typeof window.__loadingConcluido === "function") {
     window.__loadingConcluido();
@@ -7,7 +7,7 @@ function receberMaos(results) {
   hands = (results || []).slice(0, 2);
 }
 
-// Converte keypoints em dados de alto nivel (palm, grab, gesto OK).
+// Converte keypoints em dados de alto nível (palm, grab, gesto OK).
 function obterInfoMaos() {
   if (!hands.length) return [];
 
@@ -102,7 +102,7 @@ function obterInfoMaos() {
   return all;
 }
 
-// Escolhe o indicador mais proximo do trajeto para controlo ativo.
+// Escolhe o indicador mais próximo do trajeto para controlo ativo.
 function obterMelhorPontoDedo(handInfos) {
   if (!handInfos.length) return null;
 
@@ -121,7 +121,7 @@ function obterMelhorPontoDedo(handInfos) {
   return { x: best.indexX, y: best.indexY };
 }
 
-// Helper geometrico para hit-test de botoes e zonas interativas.
+// Helper geométrico para hit-test de botões e zonas interativas.
 function pontoDentroRetangulo(px, py, rectObj) {
   return (
     px >= rectObj.x &&
@@ -131,7 +131,7 @@ function pontoDentroRetangulo(px, py, rectObj) {
   );
 }
 
-// Ativa uma dica temporaria no overlay de assistencia.
+// Ativa uma dica temporária no overlay de assistência.
 function mostrarDica(mensagem, duracaoMs) {
   assistencia.tip = mensagem;
   assistencia.until = millis() + duracaoMs;
@@ -156,17 +156,17 @@ function updateAssistanceMovement(handInfos) {
   assistencia.lastPalm = palm;
 }
 
-// Mostra dica quando ha pouca atividade durante o exercicio.
+// Mostra dica quando há pouca atividade durante o exercício.
 function detetarInatividadeDica(handInfos) {
   if (estadoApp !== ESTADO_APP.EXERCISE) return;
   if (!handInfos.length) {
-    if (millis() > assistencia.until) mostrarDica("Aproxime a mao da camara para continuar.", 1800);
+    if (millis() > assistencia.until) mostrarDica("Aproxime a mão da câmara para continuar.", 1800);
     return;
   }
 
   const msInatividade = millis() - assistencia.lastMoveMs;
   if (msInatividade > PERFIL_DIFICULDADE[nivelDificuldade].msInatividade && millis() > assistencia.until) {
-    mostrarDica("Movimente a mao para manter o exercicio ativo.", 1700);
+    mostrarDica("Movimente a mão para manter o exercício ativo.", 1700);
     assistencia.lastMoveMs = millis();
   }
 }
@@ -176,7 +176,7 @@ function detetarNecessidadeAssistenciaBolas() {
   const dryMs = millis() - assistencia.lastGoodActionMs;
   const limite = PERFIL_DIFICULDADE[nivelDificuldade].msSemCapturaDica;
   if (dryMs > limite && millis() > assistencia.until) {
-    mostrarDica("Dica: aproxime a palma da bola e feche a mao para capturar.", 1900);
+    mostrarDica("Dica: aproxime a palma da bola e feche a mão para capturar.", 1900);
     assistencia.lastGoodActionMs = millis();
   }
 }
@@ -194,11 +194,11 @@ function detetarNecessidadeAssistenciaTrajeto() {
   }
 
   if (precisaoMovimento < 55 && millis() > assistencia.until) {
-    mostrarDica("Precisao baixa: tente movimentos curtos e mais controlados.", 1800);
+    mostrarDica("Precisão baixa: tente movimentos curtos e mais controlados.", 1800);
   }
 }
 
-// Atalhos de teclado para modo, dificuldade e inicio rapido.
+// Atalhos de teclado para modo, dificuldade e início rápido.
 function keyPressed() {
   garantirVozAtiva();
 
@@ -293,18 +293,18 @@ function mousePressed() {
 
 }
 
-// Altera dificuldade e recalcula o tempo total da sessao.
+// Altera dificuldade e recalcula o tempo total da sessão.
 function definirDificuldade(level) {
   nivelDificuldade = constrain(level, DIFICULDADE.FACIL, DIFICULDADE.DIFICIL);
   segundosTotaisExercicio = DURACAO_EXERCICIO_POR_DIFICULDADE[nivelDificuldade];
   segundosRestantes = segundosTotaisExercicio;
 }
 
-// Inicializa e gere comandos de voz em Portugues (Portugal).
+// Inicializa e gere comandos de voz em Português (Portugal).
 function iniciarReconhecimentoVoz() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    estadoVoz = "Nao suportado neste navegador";
+    estadoVoz = "Não suportado neste navegador";
     return;
   }
 
@@ -341,13 +341,13 @@ function iniciarReconhecimentoVoz() {
 
     if (error === "audio-capture") {
       vozPronta = false;
-      estadoVoz = "Microfone nao detetado";
+      estadoVoz = "Microfone não detetado";
       return;
     }
 
     if (error === "not-allowed" || error === "service-not-allowed") {
       vozPronta = false;
-      estadoVoz = "Permissao de microfone negada";
+      estadoVoz = "Permissão de microfone negada";
       return;
     }
 
@@ -356,7 +356,7 @@ function iniciarReconhecimentoVoz() {
 
   reconhecedorVoz.onstart = () => {
     vozPronta = true;
-    estadoVoz = "A escutar em Portugues (Portugal)";
+    estadoVoz = "A escutar em Português (Portugal)";
   };
 
   reconhecedorVoz.onend = () => {
@@ -367,7 +367,7 @@ function iniciarReconhecimentoVoz() {
         reconhecedorVoz.start();
       } catch (error) {
         // Evita desligar de vez em erros transitórios (ex.: invalid state).
-        estadoVoz = "A escutar em Portugues (Portugal)";
+        estadoVoz = "A escutar em Português (Portugal)";
       }
     }, 220);
   };
@@ -392,7 +392,7 @@ function processarComandoVoz(textoNormalizado) {
       estadoApp = ESTADO_APP.END;
       estadoVoz = "Comando: terminar";
     } else {
-      estadoVoz = "'Terminar' apenas durante o exercicio";
+      estadoVoz = "'Terminar' apenas durante o exercício";
     }
     return;
   }
@@ -404,7 +404,7 @@ function processarComandoVoz(textoNormalizado) {
       iniciarExercicio();
       estadoVoz = "Comando: reiniciar";
     } else {
-      estadoVoz = "'Reiniciar' apenas no ecra final";
+      estadoVoz = "'Reiniciar' apenas no ecrã final";
     }
     return;
   }
@@ -416,12 +416,12 @@ function processarComandoVoz(textoNormalizado) {
       iniciarExercicio();
       estadoVoz = "Comando: iniciar";
     } else {
-      estadoVoz = "'Iniciar' apenas no ecra inicial";
+      estadoVoz = "'Iniciar' apenas no ecrã inicial";
     }
     return;
   }
 
-  estadoVoz = "A escutar em Portugues (Portugal)";
+  estadoVoz = "A escutar em Português (Portugal)";
 }
 
 function tentarIniciarReconhecedorVoz() {
@@ -437,7 +437,7 @@ function tentarIniciarReconhecedorVoz() {
     }
 
     vozPronta = false;
-    estadoVoz = "Sem permissao de microfone";
+    estadoVoz = "Sem permissão de microfone";
   }
 }
 
@@ -449,7 +449,7 @@ function garantirVozAtiva() {
   tentarIniciarReconhecedorVoz();
 }
 
-// Normaliza texto reconhecido para comparacoes robustas.
+// Normaliza texto reconhecido para comparações robustas.
 function normalizarTextoVoz(text) {
   return text
     .toLowerCase()
@@ -460,7 +460,7 @@ function normalizarTextoVoz(text) {
     .trim();
 }
 
-// Mapeia coordenada X da camara para o sistema local do painel.
+// Mapeia coordenada X da câmara para o sistema local do painel.
 function mapearXMaoParaPainelLocal(handX, panelStartX, panelWidth) {
   const camMinX = layout.framePad;
   const camMaxX = layout.camW - layout.framePad;

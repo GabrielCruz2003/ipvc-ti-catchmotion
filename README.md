@@ -56,4 +56,4 @@ Nesta versão, apenas o modo **Apanhar Bolas** está considerado como funcionali
 
 ## Objetivo académico
 
-Projeto desenvolvido no contexto da unidade curricular de Tecnologias Interativas, com foco em interação natural (visão computacional + voz) aplicada a reabilitação motora.
+Projeto desenvolvido no contexto da unidade curricular de Tecnologias Interativas, com foco em interação natural (visão computacional + voz) aplicada à reabilitação motora.

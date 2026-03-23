@@ -2,7 +2,7 @@ let video;
 let handPose;
 let hands = [];
 
-// Estados globais da aplicacao.
+// Estados globais da aplicação.
 
 const ESTADO_APP = {
   CONFIG: "config",
@@ -21,8 +21,8 @@ const DIFICULDADE = {
   DIFICIL: 2
 };
 
-// Parametros de jogo por dificuldade.
-const NOMES_DIFICULDADE = ["Facil", "Medio", "Dificil"];
+// Parâmetros de jogo por dificuldade.
+const NOMES_DIFICULDADE = ["Fácil", "Médio", "Difícil"];
 const DURACAO_EXERCICIO_POR_DIFICULDADE = [180, 120, 60];
 
 const PERFIL_DIFICULDADE = [
@@ -64,7 +64,7 @@ const layout = {
   framePad: 20
 };
 
-// Estado da sessao e metricas em tempo real.
+// Estado da sessão e métricas em tempo real.
 let estadoApp = ESTADO_APP.CONFIG;
 let indiceModo = 0;
 let nivelDificuldade = DIFICULDADE.MEDIO;
@@ -130,7 +130,7 @@ let vozPronta = false;
 let estadoVoz = "A iniciar";
 let ultimoComandoVoz = "Nenhum";
 
-// Estado da assistencia visual contextual.
+// Estado da assistência visual contextual.
 const assistencia = {
   tip: "",
   until: 0,
