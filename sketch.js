@@ -30,6 +30,12 @@ function draw() {
 
   if (estadoApp === ESTADO_APP.CONFIG) {
     desenharEcraConfiguracao(handInfos);
+  } else if (estadoApp === ESTADO_APP.COUNTDOWN) {
+    atualizarContagemExercicio();
+    if (estadoApp === ESTADO_APP.COUNTDOWN) {
+      desenharOverlayContagem();
+      desenharTempoRestanteCamara();
+    }
   } else if (estadoApp === ESTADO_APP.EXERCISE) {
     segundosDecorridos = floor((millis() - inicioMillis) / 1000);
     segundosRestantes = max(segundosTotaisExercicio - segundosDecorridos, 0);

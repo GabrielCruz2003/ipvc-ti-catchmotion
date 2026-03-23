@@ -6,6 +6,7 @@ let hands = [];
 
 const ESTADO_APP = {
   CONFIG: "config",
+  COUNTDOWN: "countdown",
   EXERCISE: "exercise",
   END: "end"
 };
@@ -129,6 +130,11 @@ let reconhecedorVoz = null;
 let vozPronta = false;
 let estadoVoz = "A iniciar";
 let ultimoComandoVoz = "Nenhum";
+
+const CONTAGEM_INICIAL_SEGUNDOS = 3;
+let contagemAtual = CONTAGEM_INICIAL_SEGUNDOS;
+let contagemInicioMillis = 0;
+let osciladorContagem = null;
 
 // Estado da assistência visual contextual.
 const assistencia = {
