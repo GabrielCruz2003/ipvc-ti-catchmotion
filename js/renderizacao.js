@@ -264,7 +264,7 @@ function desenharEcraFinal(handInfos) {
 
   textSize(24);
   text("Bolas apanhadas: " + pontuacaoBolas, layout.camW * 0.5, 214);
-  text("Erros de trajeto: " + errosTrajeto, layout.camW * 0.5, 254);
+  text("");
   text("Precisao media: " + precisaoMovimento + "%", layout.camW * 0.5, 294);
   text("Tempo restante: " + segundosRestantes + "s", layout.camW * 0.5, 334);
 
@@ -622,7 +622,7 @@ function obterConteudoResultadosPainel(handInfos) {
     );
   }
 
-  return "Bolas: " + pontuacaoBolas + "\nErros trajeto: " + errosTrajeto;
+  return "Bolas: " + pontuacaoBolas;
 }
 
 // Cartao base reutilizavel para blocos do painel lateral.

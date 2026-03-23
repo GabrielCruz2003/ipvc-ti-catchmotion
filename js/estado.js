@@ -36,7 +36,7 @@ const PERFIL_DIFICULDADE = [
     msSemCapturaDica: 4200
   },
   {
-    velocidadeBolasMul: 1.05,
+    velocidadeBolasMul: 1.50,
     quantidadeBolas: 3,
     ancorasTrajeto: 7,
     toleranciaTrajeto: 24,
@@ -45,7 +45,7 @@ const PERFIL_DIFICULDADE = [
     msSemCapturaDica: 3400
   },
   {
-    velocidadeBolasMul: 1.25,
+    velocidadeBolasMul: 4.50,
     quantidadeBolas: 4,
     ancorasTrajeto: 9,
     toleranciaTrajeto: 18,
