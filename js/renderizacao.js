@@ -558,8 +558,8 @@ function desenharPainelDireito(handInfos) {
 
   fill(255);
   textAlign(LEFT, TOP);
-  textSize(22);
-  text("Painel", 22, 18);
+  textSize(26);
+  text("Painel", 22, 16);
 
   desenharBlocoPainel(blockX, 60, blockW, 126, "Instruções", obterInstrucaoAtual());
   desenharBlocoControlos(handInfos, blockX, blockW);
@@ -627,17 +627,18 @@ function obterConteudoResultadosPainel(handInfos) {
 
 // Cartão base reutilizável para blocos do painel lateral.
 function desenharBlocoPainel(x, y, w, h, title, content) {
-  fill(255, 255, 255, 30);
+  fill(255, 255, 255, 48);
   noStroke();
   rect(x, y, w, h, 14);
 
-  fill(239);
-  textSize(16);
+  fill(246);
+  textSize(19);
   textAlign(LEFT, TOP);
   text(title, x + 12, y + 10);
 
-  fill(214);
-  textSize(14);
+  fill(236);
+  textSize(16);
+  textLeading(22);
   text(content, x + 12, y + 38);
 }
 
@@ -646,12 +647,12 @@ function desenharBlocoControlos(handInfos, x, w) {
   const y = 200;
   const h = 188;
 
-  fill(255, 255, 255, 30);
+  fill(255, 255, 255, 48);
   noStroke();
   rect(x, y, w, h, 14);
 
-  fill(239);
-  textSize(16);
+  fill(246);
+  textSize(19);
   textAlign(LEFT, TOP);
   text("Controlos", x + 12, y + 10);
 
@@ -752,9 +753,9 @@ function desenharBlocoControlos(handInfos, x, w) {
     isActive: acaoSegurarPainel === "finish"
   });
 
-  fill(195, 223, 239);
+  fill(214, 237, 248);
   textAlign(LEFT, TOP);
-  textSize(12);
+  textSize(14);
   text("Dificuldade", x + 10, selectorY - 16);
 
   const podeMudarDificuldade = estadoApp !== ESTADO_APP.EXERCISE;
@@ -836,7 +837,7 @@ function drawButton(btn, label, c, state = {}) {
 
   fill(255);
   textAlign(CENTER, CENTER);
-  textSize(15);
+  textSize(17);
   text(label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.5);
 }
 
@@ -852,9 +853,9 @@ function desenharBotaoSeletorDificuldade(btn, label, enabled) {
   fill(drawColor);
   rect(btn.x - layout.panelX, btn.y, btn.w, btn.h, 8);
 
-  fill(isActive ? color(7, 44, 27) : color(220));
+  fill(isActive ? color(7, 44, 27) : color(235));
   textAlign(CENTER, CENTER);
-  textSize(12);
+  textSize(13);
   text(label, btn.x - layout.panelX + btn.w * 0.5, btn.y + btn.h * 0.54);
 }
 
