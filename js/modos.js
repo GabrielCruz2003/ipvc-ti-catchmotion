@@ -293,6 +293,7 @@ function iniciarExercicioAgora() {
   estadoApp = ESTADO_APP.EXERCISE;
   inicioMillis = millis();
   contagemAtual = 0;
+  tocarSomInicioJogo();
 }
 
 function tocarSomContagem(valor) {
@@ -315,6 +316,33 @@ function tocarSomContagem(valor) {
   osciladorContagem.freq(freq);
   osciladorContagem.amp(0.24, 0.01);
   osciladorContagem.amp(0, 0.14);
+}
+
+function tocarSomInicioJogo() {
+  try {
+    userStartAudio();
+  } catch (error) {
+    // Mantem inicio do jogo mesmo sem audio.
+  }
+
+  if (!osciladorInicio) {
+    osciladorInicio = new p5.Oscillator("sine");
+    osciladorInicio.start();
+    osciladorInicio.amp(0);
+  }
+
+  // Jingle curto de arranque: subida rapida + confirmação final.
+  osciladorInicio.freq(620);
+  osciladorInicio.amp(0.12, 0.02);
+  osciladorInicio.freq(980, 0.12);
+  osciladorInicio.amp(0, 0.15);
+
+  setTimeout(() => {
+    if (!osciladorInicio) return;
+    osciladorInicio.freq(1240);
+    osciladorInicio.amp(0.16, 0.015);
+    osciladorInicio.amp(0, 0.2);
+  }, 120);
 }
 
 // Entra no estado de exercício e inicializa a nova ronda.

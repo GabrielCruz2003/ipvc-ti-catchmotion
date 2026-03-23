@@ -135,6 +135,7 @@ const CONTAGEM_INICIAL_SEGUNDOS = 3;
 let contagemAtual = CONTAGEM_INICIAL_SEGUNDOS;
 let contagemInicioMillis = 0;
 let osciladorContagem = null;
+let osciladorInicio = null;
 
 // Estado da assistência visual contextual.
 const assistencia = {

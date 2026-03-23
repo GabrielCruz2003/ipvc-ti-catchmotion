@@ -976,8 +976,4 @@ function desenharOverlayContagem() {
   fill(255);
   textSize(128 * pulse);
   text(String(max(contagemAtual, 1)), layout.camW * 0.5, height * 0.5 + 2);
-
-  fill(198, 226, 242);
-  textSize(17);
-  text("Inicia automaticamente", layout.camW * 0.5, height * 0.5 + 88);
 }
