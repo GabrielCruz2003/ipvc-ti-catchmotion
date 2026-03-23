@@ -958,3 +958,26 @@ function desenharOverlayDica() {
   textSize(17);
   text(assistencia.tip, x + w * 0.5, y + h * 0.5);
 }
+
+// Overlay de contagem antes de iniciar/reiniciar o exercício.
+function desenharOverlayContagem() {
+  const p = (millis() - contagemInicioMillis) % 1000;
+  const pulse = 1 + 0.14 * sin(map(p, 0, 1000, 0, PI));
+
+  fill(4, 16, 26, 156);
+  noStroke();
+  rect(34, 34, layout.camW - 68, height - 68, 24);
+
+  fill(222, 242, 255);
+  textAlign(CENTER, CENTER);
+  textSize(28);
+  text("Prepare-se", layout.camW * 0.5, height * 0.5 - 92);
+
+  fill(255);
+  textSize(128 * pulse);
+  text(String(max(contagemAtual, 1)), layout.camW * 0.5, height * 0.5 + 2);
+
+  fill(198, 226, 242);
+  textSize(17);
+  text("Inicia automaticamente", layout.camW * 0.5, height * 0.5 + 88);
+}

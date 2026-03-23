@@ -23,14 +23,35 @@ function executarModoBolas(handInfos) {
   garantirQuantidadeBolas(perfil.quantidadeBolas);
 
   for (const bola of bolas) {
+    if (bola.captureFrames > 0) {
+      bola.captureFrames--;
+
+      const progress = 1 - bola.captureFrames / bola.captureDuration;
+      const scale = max(1 - progress, 0);
+      const drawR = bola.r * scale;
+
+      if (drawR > 0.5) {
+        fill(35, 158, 255, 108);
+        noStroke();
+        circle(bola.x, bola.y, drawR * 2 + 10 * scale);
+
+        fill(38, 174, 255);
+        circle(bola.x, bola.y, drawR * 2);
+      }
+
+      if (bola.captureFrames <= 0) {
+        reposicionarBola(bola);
+      }
+      continue;
+    }
+
     bola.x += bola.vx * perfil.velocidadeBolasMul;
     bola.y += bola.vy * perfil.velocidadeBolasMul;
 
     if (bola.x < 45 || bola.x > layout.camW - 45) bola.vx *= -1;
     if (bola.y < 45 || bola.y > height - 45) bola.vy *= -1;
 
-    const glow = tomEstado === "good" ? color(87, 255, 170, 180) : color(35, 158, 255, 124);
-    fill(glow);
+    fill(35, 158, 255, 124);
     noStroke();
     circle(bola.x, bola.y, bola.r * 2 + 12);
 
@@ -53,7 +74,7 @@ function executarModoBolas(handInfos) {
       tomEstado = "good";
       framesFlashEstado = 14;
       assistencia.lastGoodActionMs = millis();
-      reposicionarBola(bola);
+      bola.captureFrames = bola.captureDuration;
     }
   }
 
@@ -134,12 +155,21 @@ function reposicionarBola(ball) {
   ball.y = random(70, height - 70);
   ball.vx = random(-1.7, 1.7);
   ball.vy = random(-1.7, 1.7);
+  ball.captureFrames = 0;
 }
 
 // Garante o número de bolas esperado para a dificuldade atual.
 function garantirQuantidadeBolas(target) {
   while (bolas.length < target) {
-    const ball = { x: 0, y: 0, r: random(28, 38), vx: 0, vy: 0 };
+    const ball = {
+      x: 0,
+      y: 0,
+      r: random(28, 38),
+      vx: 0,
+      vy: 0,
+      captureDuration: 8,
+      captureFrames: 0
+    };
     reposicionarBola(ball);
     bolas.push(ball);
   }
@@ -213,10 +243,7 @@ function reiniciarSessao() {
   assistencia.lastPalm = null;
 }
 
-// Entra no estado de exercício e inicializa a nova ronda.
-function iniciarExercicio() {
-  estadoApp = ESTADO_APP.EXERCISE;
-  inicioMillis = millis();
+function iniciarContagemExercicio() {
   framesSegurarOK = 0;
   framesSegurarCentro = 0;
   framesSegurarBotaoMao = 0;
@@ -231,6 +258,7 @@ function iniciarExercicio() {
   controloPainelPrecisaLargar = true;
   controloCamaraPrecisaLargar = true;
   framesSegurarReiniciarFim = 0;
+
   segundosTotaisExercicio = DURACAO_EXERCICIO_POR_DIFICULDADE[nivelDificuldade];
   segundosRestantes = segundosTotaisExercicio;
   reiniciarSessao();
@@ -238,6 +266,60 @@ function iniciarExercicio() {
   if (obterModoAtual() === MODO.TRAJETO) {
     gerarTrajeto();
   }
+
+  estadoApp = ESTADO_APP.COUNTDOWN;
+  contagemAtual = CONTAGEM_INICIAL_SEGUNDOS;
+  contagemInicioMillis = millis();
+  tocarSomContagem(contagemAtual);
+}
+
+function atualizarContagemExercicio() {
+  if (estadoApp !== ESTADO_APP.COUNTDOWN) return;
+
+  const elapsedMs = millis() - contagemInicioMillis;
+  const novoValor = CONTAGEM_INICIAL_SEGUNDOS - floor(elapsedMs / 1000);
+
+  if (novoValor < contagemAtual && novoValor > 0) {
+    contagemAtual = novoValor;
+    tocarSomContagem(contagemAtual);
+  }
+
+  if (elapsedMs >= CONTAGEM_INICIAL_SEGUNDOS * 1000) {
+    iniciarExercicioAgora();
+  }
+}
+
+function iniciarExercicioAgora() {
+  estadoApp = ESTADO_APP.EXERCISE;
+  inicioMillis = millis();
+  contagemAtual = 0;
+}
+
+function tocarSomContagem(valor) {
+  try {
+    userStartAudio();
+  } catch (error) {
+    // Mantem a contagem a funcionar mesmo sem permissao de audio.
+  }
+
+  if (!osciladorContagem) {
+    osciladorContagem = new p5.Oscillator("triangle");
+    osciladorContagem.start();
+    osciladorContagem.amp(0);
+  }
+
+  let freq = 620;
+  if (valor === 2) freq = 760;
+  if (valor === 1) freq = 920;
+
+  osciladorContagem.freq(freq);
+  osciladorContagem.amp(0.24, 0.01);
+  osciladorContagem.amp(0, 0.14);
+}
+
+// Entra no estado de exercício e inicializa a nova ronda.
+function iniciarExercicio() {
+  iniciarContagemExercicio();
 }
 
 // Retorna o modo selecionado no seletor.
@@ -249,6 +331,9 @@ function obterModoAtual() {
 function obterInstrucaoAtual() {
   if (estadoApp === ESTADO_APP.CONFIG) {
     return "Escolha modo e nível\nClique em Iniciar ou use gesto\nMão no centro também inicia";
+  }
+  if (estadoApp === ESTADO_APP.COUNTDOWN) {
+    return "A preparar sessão\nContagem decrescente em curso\nMantenha-se pronto para começar";
   }
   if (estadoApp === ESTADO_APP.END) {
     return "Sessão concluída\nFeche a mão em Reiniciar\nou use voz: reiniciar";
