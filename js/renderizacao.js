@@ -52,6 +52,7 @@ function desenharEcraConfiguracao(handInfos) {
   const centerY = height * 0.5;
   const yInicio = 442;
   const yDificuldade = yInicio - 70;
+  const yTema = 236;
 
   fill(5, 15, 24, 148);
   noStroke();
@@ -69,7 +70,7 @@ function desenharEcraConfiguracao(handInfos) {
   fill(198, 225, 242);
   text("Sistema de Fisioterapia e Reabilitação", centerX, 145);
 
-  desenharGuiaCorpo(centerX, centerY + 6);
+  desenharSeletorObjetosInicio(centerX, yTema);
 
   botaoIniciar.x = centerX - botaoIniciar.w * 0.5;
   botaoIniciar.y = yInicio;
@@ -156,6 +157,88 @@ function desenharEcraConfiguracao(handInfos) {
   if (framesSegurarBotaoMao >= 32) {
     iniciarExercicio();
   }
+}
+
+function desenharSeletorObjetosInicio(centerX, y) {
+  const w = 108;
+  const h = 36;
+  const gap = 10;
+  const total = w * 2 + gap;
+  const x0 = centerX - total * 0.5;
+
+  fill(224, 241, 252);
+  textAlign(CENTER, TOP);
+  textSize(15);
+  text("Objetos do modo de captura", centerX, y - 26);
+
+  botoesTemaObjetos = [
+    { tema: TEMA_OBJETO.BOLAS, x: x0, y, w, h },
+    { tema: TEMA_OBJETO.FRUTAS, x: x0 + w + gap, y, w, h },
+    { tema: TEMA_OBJETO.OUTROS, x: x0, y: y + 46, w, h },
+    { tema: TEMA_OBJETO.PLANETAS, x: x0 + w + gap, y: y + 46, w, h }
+  ];
+
+  desenharBotaoTemaObjeto(botoesTemaObjetos[0], "Bolas");
+  desenharBotaoTemaObjeto(botoesTemaObjetos[1], "Frutas");
+  desenharBotaoTemaObjeto(botoesTemaObjetos[2], "Outros");
+  desenharBotaoTemaObjeto(botoesTemaObjetos[3], "Planetas");
+
+  botoesFrutasConfig = [];
+  botoesOutrosConfig = [];
+
+  if (temaObjetos === TEMA_OBJETO.BOLAS) {
+    fill(197, 224, 242);
+    textSize(13);
+    text("Objetos classicos sem selecao adicional", centerX, y + 100);
+    return;
+  }
+
+  const catalogo = obterCatalogoTemaAtual();
+  const selecionados = obterSelecaoTemaAtual();
+
+  if (!catalogo.length) {
+    fill(249, 210, 122);
+    textAlign(CENTER, TOP);
+    textSize(13);
+    text("Não existem objetos disponíveis para este tema", centerX, y + 48 + 8);
+    return;
+  }
+
+  // Mostrar mensagem para abrir popup
+  fill(197, 224, 242);
+  textSize(13);
+  text("Clique no tema acima para abrir seletor visual de objetos", centerX, y + 44);
+}
+
+function desenharBotaoTemaObjeto(btn, label) {
+  const ativo = temaObjetos === btn.tema;
+  const hovered = pontoDentroRetangulo(mouseX, mouseY, btn);
+  const base = ativo ? color(61, 200, 146) : color(255, 255, 255, 28);
+  const drawColor = hovered ? lerpColor(base, color(255), 0.12) : base;
+
+  noStroke();
+  fill(drawColor);
+  rect(btn.x, btn.y, btn.w, btn.h, 8);
+
+  fill(ativo ? color(7, 44, 27) : color(228));
+  textAlign(CENTER, CENTER);
+  textSize(14);
+  text(label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.56);
+}
+
+function desenharChipObjetoConfig(btn, label, ativo) {
+  const hovered = pontoDentroRetangulo(mouseX, mouseY, btn);
+  const base = ativo ? color(85, 214, 170, 232) : color(255, 255, 255, 20);
+  const drawColor = hovered ? lerpColor(base, color(255), 0.13) : base;
+
+  noStroke();
+  fill(drawColor);
+  rect(btn.x, btn.y, btn.w, btn.h, 8);
+
+  fill(ativo ? color(8, 52, 35) : color(225));
+  textAlign(CENTER, CENTER);
+  textSize(12);
+  text((ativo ? "[x] " : "[ ] ") + label, btn.x + btn.w * 0.5, btn.y + btn.h * 0.55);
 }
 
 function desenharSeletorDificuldadeInicio(handInfos, centerX, y) {
@@ -263,7 +346,7 @@ function desenharEcraFinal(handInfos) {
   text("Sessão concluída", layout.camW * 0.5, 122);
 
   textSize(24);
-  text("Bolas apanhadas: " + pontuacaoBolas, layout.camW * 0.5, 214);
+  text("Objetos apanhados: " + pontuacaoBolas, layout.camW * 0.5, 214);
   text("");
   text("Precisão média: " + precisaoMovimento + "%", layout.camW * 0.5, 294);
   text("Tempo restante: " + segundosRestantes + "s", layout.camW * 0.5, 334);
@@ -441,7 +524,7 @@ function desenharTempoRestanteCamara() {
   const xBolas = xTempo - gap - w;
   const y = layout.framePad + 20;
 
-  desenharBadgeCamaraInfo(xBolas, y, w, h, "Bolas", String(pontuacaoBolas));
+  desenharBadgeCamaraInfo(xBolas, y, w, h, "Capturas", String(pontuacaoBolas));
   desenharBadgeCamaraInfo(xTempo, y, w, h, "Tempo", segundosRestantes + "s");
 }
 
@@ -565,17 +648,17 @@ function desenharPainelDireito(handInfos) {
   desenharBlocoControlos(handInfos, blockX, blockW);
   desenharBlocoPainel(
     blockX,
-    398,
+    456,
     blockW,
-    112,
+    118,
     "Monitorização",
     obterConteudoMonitorizacaoPainel()
   );
   desenharBlocoPainel(
     blockX,
-    522,
+    586,
     blockW,
-    98,
+    78,
     estadoApp === ESTADO_APP.CONFIG ? "Estado" : "Resultados",
     obterConteudoResultadosPainel(handInfos)
   );
@@ -591,6 +674,10 @@ function obterConteudoMonitorizacaoPainel() {
       obterModoAtual() +
       "\nDificuldade: " +
       NOMES_DIFICULDADE[nivelDificuldade] +
+      "\nTema: " +
+      obterNomeTemaObjetos() +
+      "\nSelecao: " +
+      obterResumoSelecaoObjetos() +
       "\nDuração: " +
       floor(DURACAO_EXERCICIO_POR_DIFICULDADE[nivelDificuldade] / 60) +
       " min"
@@ -603,7 +690,9 @@ function obterConteudoMonitorizacaoPainel() {
     "s\nPrecisão: " +
     precisaoMovimento +
     "%\nNível: " +
-    NOMES_DIFICULDADE[nivelDificuldade]
+    NOMES_DIFICULDADE[nivelDificuldade] +
+    "\nTema: " +
+    obterNomeTemaObjetos()
   );
 }
 
@@ -622,7 +711,7 @@ function obterConteudoResultadosPainel(handInfos) {
     );
   }
 
-  return "Bolas: " + pontuacaoBolas;
+  return "Capturas: " + pontuacaoBolas;
 }
 
 // Cartão base reutilizável para blocos do painel lateral.
@@ -645,7 +734,7 @@ function desenharBlocoPainel(x, y, w, h, title, content) {
 // Bloco de botões (reiniciar/terminar) e seletor de dificuldade.
 function desenharBlocoControlos(handInfos, x, w) {
   const y = 200;
-  const h = 188;
+  const h = 246;
 
   fill(255, 255, 255, 48);
   noStroke();
@@ -763,6 +852,52 @@ function desenharBlocoControlos(handInfos, x, w) {
   desenharBotaoSeletorDificuldade(botoesDificuldade[1], "Médio", podeMudarDificuldade);
   desenharBotaoSeletorDificuldade(botoesDificuldade[2], "Difícil", podeMudarDificuldade);
 
+  const temaY = selectorY + 45;
+  const temaGap = 8;
+  const temaBtnW = (w - selectorPad * 2 - temaGap) / 2;
+  const temaBtnH = 24;
+  botoesTemaObjetosPainel = [
+    {
+      tema: TEMA_OBJETO.BOLAS,
+      x: layout.panelX + x + selectorPad,
+      y: temaY,
+      w: temaBtnW,
+      h: temaBtnH
+    },
+    {
+      tema: TEMA_OBJETO.FRUTAS,
+      x: layout.panelX + x + selectorPad + temaBtnW + temaGap,
+      y: temaY,
+      w: temaBtnW,
+      h: temaBtnH
+    },
+    {
+      tema: TEMA_OBJETO.OUTROS,
+      x: layout.panelX + x + selectorPad,
+      y: temaY + temaBtnH + 6,
+      w: temaBtnW,
+      h: temaBtnH
+    },
+    {
+      tema: TEMA_OBJETO.PLANETAS,
+      x: layout.panelX + x + selectorPad + temaBtnW + temaGap,
+      y: temaY + temaBtnH + 6,
+      w: temaBtnW,
+      h: temaBtnH
+    }
+  ];
+
+  fill(214, 237, 248);
+  textAlign(LEFT, TOP);
+  textSize(14);
+  text("Tema de objetos", x + 10, temaY - 16);
+
+  const podeMudarTema = true;
+  desenharBotaoTemaPainel(botoesTemaObjetosPainel[0], "Bolas", podeMudarTema);
+  desenharBotaoTemaPainel(botoesTemaObjetosPainel[1], "Frutas", podeMudarTema);
+  desenharBotaoTemaPainel(botoesTemaObjetosPainel[2], "Outros", podeMudarTema);
+  desenharBotaoTemaPainel(botoesTemaObjetosPainel[3], "Planetas", podeMudarTema);
+
   if (estadoApp !== ESTADO_APP.EXERCISE) {
     acaoSegurarPainel = null;
     framesSegurarPainel = 0;
@@ -856,6 +991,23 @@ function desenharBotaoSeletorDificuldade(btn, label, enabled) {
   fill(isActive ? color(7, 44, 27) : color(235));
   textAlign(CENTER, CENTER);
   textSize(13);
+  text(label, btn.x - layout.panelX + btn.w * 0.5, btn.y + btn.h * 0.54);
+}
+
+function desenharBotaoTemaPainel(btn, label, enabled) {
+  const isActive = temaObjetos === btn.tema;
+  const isHovered = pontoDentroRetangulo(mouseX, mouseY, btn) && enabled;
+
+  const base = isActive ? color(57, 199, 145) : color(255, 255, 255, enabled ? 26 : 14);
+  const drawColor = isHovered ? lerpColor(base, color(255), 0.14) : base;
+
+  noStroke();
+  fill(drawColor);
+  rect(btn.x - layout.panelX, btn.y, btn.w, btn.h, 8);
+
+  fill(isActive ? color(7, 44, 27) : color(235));
+  textAlign(CENTER, CENTER);
+  textSize(12);
   text(label, btn.x - layout.panelX + btn.w * 0.5, btn.y + btn.h * 0.54);
 }
 
@@ -977,4 +1129,172 @@ function desenharOverlayContagem() {
   fill(255);
   textSize(128 * pulse);
   text(String(max(contagemAtual, 1)), layout.camW * 0.5, height * 0.5 + 2);
+}
+
+// Popup para seleção visual de objetos com imagens.
+function desenharPopupSelecaoObjetos() {
+  if (!popupObjetoAberto || !popupTemaSelecionado) return;
+
+  // Fundo escuro semitransparente
+  fill(0, 0, 0, 180);
+  noStroke();
+  rect(0, 0, layout.totalW, height);
+
+  // Determinar catálogo e selecionados baseado no tema
+  let catalogo = [];
+  let selecionados = [];
+  
+  if (popupTemaSelecionado === TEMA_OBJETO.FRUTAS) {
+    catalogo = obterCatalogoTemaAtual();
+    selecionados = frutasSelecionadas;
+  } else if (popupTemaSelecionado === TEMA_OBJETO.OUTROS) {
+    catalogo = obterCatalogoTemaAtual();
+    selecionados = outrosSelecionados;
+  } else if (popupTemaSelecionado === TEMA_OBJETO.PLANETAS) {
+    catalogo = obterCatalogoTemaAtual();
+    selecionados = planetasSelecionados;
+  }
+
+  if (!catalogo.length) {
+    // Se não há objetos, mostrar mensagem
+    const popupW = 500;
+    const popupH = 200;
+    const popupX = (layout.totalW - popupW) * 0.5;
+    const popupY = (height - popupH) * 0.5;
+
+    fill(10, 35, 55);
+    stroke(76, 200, 150);
+    strokeWeight(2);
+    rect(popupX, popupY, popupW, popupH, 16);
+
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(18);
+    text("Sem objetos disponíveis", popupX + popupW * 0.5, popupY + popupH * 0.5);
+
+    return;
+  }
+
+  // Tamanho do popup
+  const cardW = 110;
+  const cardH = 140;
+  const gap = 16;
+  const porLinha = 3;
+  const conteudoW = cardW * porLinha + gap * (porLinha - 1);
+  const conteudoH = ceil(catalogo.length / porLinha) * (cardH + gap) + gap;
+  const popupW = conteudoW + 60;
+  const popupH = conteudoH + 100;
+  const popupX = (layout.totalW - popupW) * 0.5;
+  const popupY = (height - popupH) * 0.5;
+
+  // Fundo do popup
+  fill(12, 40, 60);
+  stroke(76, 200, 150);
+  strokeWeight(2);
+  rect(popupX, popupY, popupW, popupH, 16);
+
+  // Título
+  fill(220, 245, 255);
+  textAlign(CENTER, TOP);
+  textSize(20);
+  let temaLabel = "Objetos";
+  if (popupTemaSelecionado === TEMA_OBJETO.FRUTAS) temaLabel = "Frutas";
+  else if (popupTemaSelecionado === TEMA_OBJETO.OUTROS) temaLabel = "Outros";
+  else if (popupTemaSelecionado === TEMA_OBJETO.PLANETAS) temaLabel = "Planetas";
+  text("Selecione " + temaLabel, popupX + popupW * 0.5, popupY + 14);
+
+  // Botão fechar
+  botoesPopupFechar = {
+    x: popupX + popupW - 38,
+    y: popupY + 10,
+    w: 28,
+    h: 28
+  };
+  const hoveredFechar = pontoDentroRetangulo(mouseX, mouseY, botoesPopupFechar);
+  fill(hoveredFechar ? color(255, 100, 100) : color(100, 150, 200));
+  rect(botoesPopupFechar.x, botoesPopupFechar.y, botoesPopupFechar.w, botoesPopupFechar.h, 6);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(16);
+  text("×", botoesPopupFechar.x + 14, botoesPopupFechar.y + 14);
+
+  // Grid de objetos
+  botoesPopupObjetos = [];
+  const yConteudo = popupY + 52;
+  const xConteudo = popupX + 30;
+
+  for (let i = 0; i < catalogo.length; i++) {
+    const item = catalogo[i];
+    const col = i % porLinha;
+    const row = floor(i / porLinha);
+    const x = xConteudo + col * (cardW + gap);
+    const y = yConteudo + row * (cardH + gap);
+
+    const card = {
+      id: item.id,
+      x: x,
+      y: y,
+      w: cardW,
+      h: cardH
+    };
+
+    botoesPopupObjetos.push(card);
+
+    const ativo = selecionados.includes(item.id);
+    desenharCardObjetoPopup(card, item, ativo);
+  }
+}
+
+// Desenha um card individual de objeto no popup com imagem.
+function desenharCardObjetoPopup(card, item, ativo) {
+  const hovered = pontoDentroRetangulo(mouseX, mouseY, card);
+  
+  // Fundo do card
+  fill(ativo ? color(76, 200, 150, 220) : color(40, 80, 110));
+  stroke(ativo ? color(150, 255, 200) : color(100, 150, 180));
+  strokeWeight(hovered ? 2.5 : 1.5);
+  rect(card.x, card.y, card.w, card.h, 10);
+
+  // Área da imagem
+  const imgSize = 80;
+  const imgX = card.x + (card.w - imgSize) * 0.5;
+  const imgY = card.y + 14;
+
+  // Desenhar imagem ou placeholder
+  const img = atlasObjetos[item.id];
+  if (img) {
+    // Desenhar a imagem SVG
+    image(img, imgX, imgY, imgSize, imgSize);
+  } else {
+    // Placeholder se imagem não existir
+    fill(100, 120, 140);
+    rect(imgX, imgY, imgSize, imgSize, 6);
+    fill(180, 200, 220);
+    textAlign(CENTER, CENTER);
+    textSize(11);
+    text("?", imgX + imgSize * 0.5, imgY + imgSize * 0.5);
+  }
+
+  // Label do objeto
+  fill(ativo ? color(244, 255, 245) : color(200, 220, 240));
+  textAlign(CENTER, CENTER);
+  textSize(11);
+  text(item.label, card.x + card.w * 0.5, card.y + card.h - 12);
+
+  // Checkbox visual
+  const checkSize = 16;
+  const checkX = card.x + card.w - checkSize - 6;
+  const checkY = card.y + 6;
+  
+  fill(ativo ? color(76, 200, 150) : color(100, 140, 180));
+  stroke(ativo ? color(220, 255, 230) : color(150, 180, 210));
+  strokeWeight(1.5);
+  rect(checkX, checkY, checkSize, checkSize, 3);
+  
+  if (ativo) {
+    fill(255);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text("✓", checkX + checkSize * 0.5, checkY + checkSize * 0.5);
+  }
 }

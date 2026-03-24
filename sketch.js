@@ -1,6 +1,7 @@
 // Carrega o modelo de deteção de mãos antes do setup.
 function preload() {
   handPose = ml5.handPose();
+  carregarImagensObjetos();
 }
 
 // Inicializa canvas, câmara, deteção de mãos, voz e sessão.
@@ -53,4 +54,5 @@ function draw() {
 
   desenharPainelDireito(handInfos);
   desenharOverlayDica();
+  desenharPopupSelecaoObjetos();
 }

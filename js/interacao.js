@@ -202,6 +202,13 @@ function detetarNecessidadeAssistenciaTrajeto() {
 function keyPressed() {
   garantirVozAtiva();
 
+  // Fechar popup com ESC
+  if (keyCode === ESCAPE && popupObjetoAberto) {
+    popupObjetoAberto = false;
+    popupTemaSelecionado = null;
+    return;
+  }
+
   if (key === "m" || key === "M") {
     indiceModo = indiceModo === 0 ? 1 : 0;
   }
@@ -218,6 +225,30 @@ function keyPressed() {
 // Clique de rato para iniciar, controlar painel e escolher dificuldade.
 function mousePressed() {
   garantirVozAtiva();
+
+  // Lógica do popup de seleção de objetos
+  if (popupObjetoAberto) {
+    // Se clicou no botão fechar
+    if (botoesPopupFechar && pontoDentroRetangulo(mouseX, mouseY, botoesPopupFechar)) {
+      popupObjetoAberto = false;
+      popupTemaSelecionado = null;
+      return;
+    }
+
+    // Se clicou num card do popup
+    if (botoesPopupObjetos && botoesPopupObjetos.length) {
+      const clickedCard = botoesPopupObjetos.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+      if (clickedCard) {
+        alternarObjetoSelecao(clickedCard.id, popupTemaSelecionado);
+        return;
+      }
+    }
+
+    // Se clicou na área escura (fora do popup), fechar
+    popupObjetoAberto = false;
+    popupTemaSelecionado = null;
+    return;
+  }
 
   if (estadoApp === ESTADO_APP.END) {
     const restartFimBox = {
@@ -256,6 +287,35 @@ function mousePressed() {
     }
   }
 
+  if (estadoApp === ESTADO_APP.CONFIG && botoesTemaObjetos.length) {
+    const clickedTema = botoesTemaObjetos.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+    if (clickedTema) {
+      // Abrir popup se for Frutas, Outros ou Planetas
+      if (clickedTema.tema === TEMA_OBJETO.FRUTAS || clickedTema.tema === TEMA_OBJETO.OUTROS || clickedTema.tema === TEMA_OBJETO.PLANETAS) {
+        popupObjetoAberto = true;
+        popupTemaSelecionado = clickedTema.tema;
+      }
+      definirTemaObjetos(clickedTema.tema);
+      return;
+    }
+  }
+
+  if (estadoApp === ESTADO_APP.CONFIG && temaObjetos === TEMA_OBJETO.FRUTAS && botoesFrutasConfig.length) {
+    const clickedFruta = botoesFrutasConfig.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+    if (clickedFruta) {
+      alternarObjetoSelecao(clickedFruta.id, TEMA_OBJETO.FRUTAS);
+      return;
+    }
+  }
+
+  if (estadoApp === ESTADO_APP.CONFIG && temaObjetos === TEMA_OBJETO.OUTROS && botoesOutrosConfig.length) {
+    const clickedOutro = botoesOutrosConfig.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+    if (clickedOutro) {
+      alternarObjetoSelecao(clickedOutro.id, TEMA_OBJETO.OUTROS);
+      return;
+    }
+  }
+
   if (estadoApp === ESTADO_APP.EXERCISE) {
     const geoCamara =
       typeof obterGeometriaControlosCamara === "function"
@@ -287,6 +347,18 @@ function mousePressed() {
     const clicked = botoesDificuldade.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
     if (clicked) {
       definirDificuldade(clicked.level);
+      return;
+    }
+  }
+
+  if (botoesTemaObjetosPainel.length) {
+    const clickedTemaPainel = botoesTemaObjetosPainel.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
+    if (clickedTemaPainel) {
+      if (clickedTemaPainel.tema !== TEMA_OBJETO.BOLAS) {
+        popupObjetoAberto = true;
+        popupTemaSelecionado = clickedTemaPainel.tema;
+      }
+      definirTemaObjetos(clickedTemaPainel.tema);
       return;
     }
   }

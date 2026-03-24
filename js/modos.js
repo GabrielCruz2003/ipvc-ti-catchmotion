@@ -17,27 +17,179 @@ function executarExercicio(handInfos) {
   detetarInatividadeDica(handInfos);
 }
 
+function obterNomeTemaObjetos() {
+  if (temaObjetos === TEMA_OBJETO.FRUTAS) return "Frutas";
+  if (temaObjetos === TEMA_OBJETO.OUTROS) return "Outros";
+  if (temaObjetos === TEMA_OBJETO.PLANETAS) return "Planetas";
+  return "Bolas";
+}
+
+function obterCatalogoTemaAtual() {
+  if (temaObjetos === TEMA_OBJETO.FRUTAS) {
+    return CATALOGO_FRUTAS.filter((item) => !!atlasObjetos[item.id]);
+  }
+  if (temaObjetos === TEMA_OBJETO.OUTROS) {
+    return CATALOGO_OUTROS.filter((item) => !!atlasObjetos[item.id]);
+  }
+  if (temaObjetos === TEMA_OBJETO.PLANETAS) {
+    return CATALOGO_PLANETAS.filter((item) => !!atlasObjetos[item.id]);
+  }
+  return [];
+}
+
+function obterCatalogoCompletoObjetos() {
+  return [...CATALOGO_FRUTAS, ...CATALOGO_OUTROS, ...CATALOGO_PLANETAS];
+}
+
+function obterDefinicaoObjetoPorId(id) {
+  return obterCatalogoCompletoObjetos().find((item) => item.id === id) || null;
+}
+
+function carregarImagensObjetos() {
+  atlasObjetos = {};
+
+  for (const item of obterCatalogoCompletoObjetos()) {
+    const caminho = encodeURI("assets/objetos/" + item.categoria + "/" + item.ficheiro);
+    atlasObjetos[item.id] = loadImage(
+      caminho,
+      () => {},
+      () => {
+        atlasObjetos[item.id] = null;
+      }
+    );
+  }
+}
+
+function obterSelecaoTemaAtual() {
+  if (temaObjetos === TEMA_OBJETO.FRUTAS) return frutasSelecionadas;
+  if (temaObjetos === TEMA_OBJETO.OUTROS) return outrosSelecionados;
+  if (temaObjetos === TEMA_OBJETO.PLANETAS) return planetasSelecionados;
+  return [];
+}
+
+function obterResumoSelecaoObjetos() {
+  if (temaObjetos === TEMA_OBJETO.BOLAS) return "Classicas";
+
+  const catalogo = obterCatalogoTemaAtual();
+  const selecionados = obterSelecaoTemaAtual();
+  const labels = catalogo
+    .filter((item) => selecionados.includes(item.id))
+    .map((item) => item.label);
+
+  if (!labels.length) return "Nenhum";
+  if (labels.length <= 3) return labels.join(", ");
+  return labels.slice(0, 3).join(", ") + " +" + (labels.length - 3);
+}
+
+function definirTemaObjetos(novoTema) {
+  temaObjetos = novoTema;
+  garantirSelecaoObjetosValida();
+}
+
+function alternarObjetoSelecao(id, categoria) {
+  // Só permite selecionar objetos que existam na pasta/carregados no atlas.
+  if (categoria !== TEMA_OBJETO.BOLAS && !atlasObjetos[id]) return;
+
+  const alvo = categoria === TEMA_OBJETO.FRUTAS 
+    ? frutasSelecionadas 
+    : categoria === TEMA_OBJETO.PLANETAS 
+    ? planetasSelecionados 
+    : outrosSelecionados;
+  
+  const jaSelecionado = alvo.includes(id);
+
+  if (jaSelecionado) {
+    if (alvo.length > 1) {
+      const idx = alvo.indexOf(id);
+      alvo.splice(idx, 1);
+    }
+  } else {
+    alvo.push(id);
+  }
+
+  garantirSelecaoObjetosValida();
+}
+
+function garantirSelecaoObjetosValida() {
+  const frutasDisponiveis = CATALOGO_FRUTAS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
+  const outrosDisponiveis = CATALOGO_OUTROS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
+  const planetasDisponiveis = CATALOGO_PLANETAS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
+
+  frutasSelecionadas = frutasSelecionadas.filter((id) => frutasDisponiveis.includes(id));
+  if (!frutasSelecionadas.length && frutasDisponiveis.length) {
+    frutasSelecionadas = [frutasDisponiveis[0]];
+  }
+
+  outrosSelecionados = outrosSelecionados.filter((id) => outrosDisponiveis.includes(id));
+  if (!outrosSelecionados.length && outrosDisponiveis.length) {
+    outrosSelecionados = [outrosDisponiveis[0]];
+  }
+
+  planetasSelecionados = planetasSelecionados.filter((id) => planetasDisponiveis.includes(id));
+  if (!planetasSelecionados.length && planetasDisponiveis.length) {
+    planetasSelecionados = [planetasDisponiveis[0]];
+  }
+}
+
+function sortearObjetoSelecionado() {
+  if (temaObjetos === TEMA_OBJETO.BOLAS) return null;
+
+  const selecionados = obterSelecaoTemaAtual().filter((id) => !!atlasObjetos[id]);
+  if (!selecionados.length) return null;
+  return random(selecionados);
+}
+
+function obterSpriteObjeto(id) {
+  if (!id) return null;
+  if (atlasObjetos[id]) return atlasObjetos[id];
+  return null;
+}
+
+function desenharObjetoJogo(objeto, scale = 1) {
+  const safeScale = constrain(Number.isFinite(scale) ? scale : 1, 0, 1);
+
+  if (temaObjetos === TEMA_OBJETO.BOLAS || !objeto.objetoId) {
+    fill(35, 158, 255, 124);
+    noStroke();
+    circle(objeto.x, objeto.y, objeto.r * 2 * safeScale + 12 * safeScale);
+
+    fill(38, 174, 255);
+    circle(objeto.x, objeto.y, objeto.r * 2 * safeScale);
+    return;
+  }
+
+  const sprite = obterSpriteObjeto(objeto.objetoId);
+  if (!sprite) return;
+
+  noStroke();
+  fill(124, 214, 255, 62);
+  const baseSize = constrain(objeto.r * 1.85, 46, 68);
+  const size = baseSize * safeScale;
+  circle(objeto.x, objeto.y, size);
+
+  push();
+  imageMode(CENTER);
+  image(sprite, objeto.x, objeto.y, size, size);
+  pop();
+}
+
 // Atualiza física das bolas, captura por mão e pontuação.
 function executarModoBolas(handInfos) {
   const perfil = PERFIL_DIFICULDADE[nivelDificuldade];
   garantirQuantidadeBolas(perfil.quantidadeBolas);
 
   for (const bola of bolas) {
+    if (bola.respawnDelayFrames > 0) {
+      bola.respawnDelayFrames--;
+      continue;
+    }
+
     if (bola.captureFrames > 0) {
       bola.captureFrames--;
 
       const progress = 1 - bola.captureFrames / bola.captureDuration;
       const scale = max(1 - progress, 0);
-      const drawR = bola.r * scale;
-
-      if (drawR > 0.5) {
-        fill(35, 158, 255, 108);
-        noStroke();
-        circle(bola.x, bola.y, drawR * 2 + 10 * scale);
-
-        fill(38, 174, 255);
-        circle(bola.x, bola.y, drawR * 2);
-      }
+      desenharObjetoJogo(bola, scale);
 
       if (bola.captureFrames <= 0) {
         reposicionarBola(bola);
@@ -51,12 +203,12 @@ function executarModoBolas(handInfos) {
     if (bola.x < 45 || bola.x > layout.camW - 45) bola.vx *= -1;
     if (bola.y < 45 || bola.y > height - 45) bola.vy *= -1;
 
-    fill(35, 158, 255, 124);
-    noStroke();
-    circle(bola.x, bola.y, bola.r * 2 + 12);
+    desenharObjetoJogo(bola, 1);
 
-    fill(38, 174, 255);
-    circle(bola.x, bola.y, bola.r * 2);
+    if (bola.spawnInvulneravelFrames > 0) {
+      bola.spawnInvulneravelFrames--;
+      continue;
+    }
 
     let caught = false;
     for (const handInfo of handInfos) {
@@ -85,7 +237,7 @@ function executarModoBolas(handInfos) {
   fill(255);
   textAlign(LEFT, TOP);
   textSize(18);
-  text("Feche a mão para apanhar as bolas", 40, 30);
+  text("Feche a mão para apanhar os objetos", 40, 30);
 }
 
 // Avalia o seguimento do trajeto com dedo indicador e calcula precisão.
@@ -155,7 +307,11 @@ function reposicionarBola(ball) {
   ball.y = random(70, height - 70);
   ball.vx = random(-1.7, 1.7);
   ball.vy = random(-1.7, 1.7);
+  ball.objetoId = sortearObjetoSelecionado();
   ball.captureFrames = 0;
+  // Evita reaparição/captura imediata no mesmo local da mão.
+  ball.respawnDelayFrames = 2;
+  ball.spawnInvulneravelFrames = 12;
 }
 
 // Garante o número de bolas esperado para a dificuldade atual.
@@ -168,7 +324,9 @@ function garantirQuantidadeBolas(target) {
       vx: 0,
       vy: 0,
       captureDuration: 8,
-      captureFrames: 0
+      captureFrames: 0,
+      respawnDelayFrames: 0,
+      spawnInvulneravelFrames: 0
     };
     reposicionarBola(ball);
     bolas.push(ball);
@@ -226,6 +384,7 @@ function reiniciarSessao() {
   progressoTrajeto = 0;
   pontosTrajeto = [];
 
+  garantirSelecaoObjetosValida();
   bolas = [];
   garantirQuantidadeBolas(PERFIL_DIFICULDADE[nivelDificuldade].quantidadeBolas);
   handGrabStableFrames = [0, 0];
@@ -367,7 +526,7 @@ function obterInstrucaoAtual() {
     return "Sessão concluída\nFeche a mão em Reiniciar\nou use voz: reiniciar";
   }
   if (obterModoAtual() === MODO.BOLAS) {
-    return "Aproxime a palma da bola\nFeche a mão para agarrar\nCada captura soma 1 ponto";
+    return "Aproxime a palma do objeto\nFeche a mão para agarrar\nCada captura soma 1 ponto";
   }
   return "Use o dedo indicador\nMantenha-se na linha guia\nEvite desvios para maior precisão";
 }

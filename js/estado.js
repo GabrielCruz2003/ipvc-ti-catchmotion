@@ -16,6 +16,42 @@ const MODO = {
   TRAJETO: "Seguir o Caminho"
 };
 
+const TEMA_OBJETO = {
+  BOLAS: "bolas",
+  FRUTAS: "frutas",
+  OUTROS: "outros",
+  PLANETAS: "planetas"
+};
+
+const CATALOGO_FRUTAS = [
+  { id: "ananas", label: "Ananás", categoria: "frutas", ficheiro: "Ananás.svg" },
+  { id: "banana", label: "Banana", categoria: "frutas", ficheiro: "Banana.svg" },
+  { id: "cerejas", label: "Cerejas", categoria: "frutas", ficheiro: "Cerejas.svg" },
+  { id: "laranja", label: "Laranja", categoria: "frutas", ficheiro: "Laranja.svg" },
+  { id: "limao", label: "Limão", categoria: "frutas", ficheiro: "Limão.svg" },
+  { id: "maca", label: "Maçã", categoria: "frutas", ficheiro: "Maça.svg" },
+  { id: "uvas", label: "Uvas", categoria: "frutas", ficheiro: "Uvas.svg" }
+];
+
+const CATALOGO_OUTROS = [
+  { id: "estrela", label: "Estrela", categoria: "outros", ficheiro: "estrela.svg" },
+  { id: "diamante", label: "Diamante", categoria: "outros", ficheiro: "diamante.svg" },
+  { id: "raio", label: "Raio", categoria: "outros", ficheiro: "raio.svg" },
+  { id: "alvo", label: "Alvo", categoria: "outros", ficheiro: "alvo.svg" },
+  { id: "foguete", label: "Foguete", categoria: "outros", ficheiro: "foguete.svg" }
+];
+
+const CATALOGO_PLANETAS = [
+  { id: "mercurio", label: "Mercúrio", categoria: "planetas", ficheiro: "Mercúrio.svg" },
+  { id: "venus", label: "Vénus", categoria: "planetas", ficheiro: "Vénus.svg" },
+  { id: "terra", label: "Terra", categoria: "planetas", ficheiro: "Terra.svg" },
+  { id: "marte", label: "Marte", categoria: "planetas", ficheiro: "Marte.svg" },
+  { id: "jupiter", label: "Júpiter", categoria: "planetas", ficheiro: "Júpiter.svg" },
+  { id: "saturno", label: "Saturno", categoria: "planetas", ficheiro: "Saturno.svg" },
+  { id: "urano", label: "Urano", categoria: "planetas", ficheiro: "Urano.svg" },
+  { id: "neptuno", label: "Neptuno", categoria: "planetas", ficheiro: "Neptuno.svg" }
+];
+
 const DIFICULDADE = {
   FACIL: 0,
   MEDIO: 1,
@@ -69,6 +105,10 @@ const layout = {
 let estadoApp = ESTADO_APP.CONFIG;
 let indiceModo = 0;
 let nivelDificuldade = DIFICULDADE.MEDIO;
+let temaObjetos = TEMA_OBJETO.BOLAS;
+let frutasSelecionadas = ["banana", "laranja", "maca"];
+let outrosSelecionados = ["estrela", "diamante", "raio"];
+let planetasSelecionados = ["mercurio", "venus", "terra"];
 
 let inicioMillis = 0;
 let segundosDecorridos = 0;
@@ -125,6 +165,10 @@ const botoesCamara = {
 let botoesDificuldade = [];
 let botoesDificuldadeInicio = [];
 let botoesDificuldadeFim = [];
+let botoesTemaObjetos = [];
+let botoesFrutasConfig = [];
+let botoesOutrosConfig = [];
+let botoesTemaObjetosPainel = [];
 
 let reconhecedorVoz = null;
 let vozPronta = false;
@@ -136,6 +180,13 @@ let contagemAtual = CONTAGEM_INICIAL_SEGUNDOS;
 let contagemInicioMillis = 0;
 let osciladorContagem = null;
 let osciladorInicio = null;
+let atlasObjetos = {};
+
+// Estado do popup de seleção de objetos.
+let popupObjetoAberto = false;
+let popupTemaSelecionado = null;
+let botoesPopupObjetos = [];
+let botoesPopupFechar = null;
 
 // Estado da assistência visual contextual.
 const assistencia = {

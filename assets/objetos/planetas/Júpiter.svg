@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="300" height="300">
+  <defs>
+    <radialGradient id="jup-base" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#e8cdb7" />
+      <stop offset="100%" stop-color="#8a5b42" />
+    </radialGradient>
+    <linearGradient id="shadow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="40%" stop-color="#000000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.75" />
+    </linearGradient>
+    <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <clipPath id="planet-clip">
+      <circle cx="100" cy="100" r="90" />
+    </clipPath>
+  </defs>
+
+  <circle cx="100" cy="100" r="90" fill="url(#jup-base)" stroke="#593421" stroke-width="2" />
+
+  <g clip-path="url(#planet-clip)">
+    <path d="M 0 30 Q 100 50 200 30 L 200 50 Q 100 70 0 50 Z" fill="#b88361" opacity="0.8"/>
+    <path d="M 0 65 Q 100 85 200 65 L 200 95 Q 100 115 0 95 Z" fill="#d9ad8c" opacity="0.6"/>
+    <path d="M 0 110 Q 100 130 200 110 L 200 140 Q 100 160 0 140 Z" fill="#a86948" opacity="0.7"/>
+    <path d="M 0 155 Q 100 170 200 155 L 200 180 Q 100 190 0 180 Z" fill="#693c26" opacity="0.5"/>
+    
+    <ellipse cx="140" cy="125" rx="22" ry="12" fill="#ba4822" transform="rotate(-10 140 125)"/>
+    <ellipse cx="140" cy="125" rx="14" ry="7" fill="#e86e46" transform="rotate(-10 140 125)"/>
+    <path d="M 110 125 Q 140 100 170 135" fill="none" stroke="#e8cdb7" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+  </g>
+
+  <circle cx="100" cy="100" r="90" fill="url(#shadow)" />
+  <ellipse cx="100" cy="40" rx="65" ry="22" fill="url(#gloss)" transform="rotate(-15 100 40)" />
+</svg>
