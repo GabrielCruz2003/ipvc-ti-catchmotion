@@ -54,25 +54,21 @@ function desenharEcraConfiguracao(handInfos) {
   const yDificuldade = yInicio - 70;
   const yTema = 236;
 
-  // Fundo do ecrã de configuração: usa um overlay mais opaco para melhorar contraste
-  fill(5, 15, 24, 212); // alfa aumentado -> tela mais escura/menos transparente
+  fill(5, 15, 24, 148);
   noStroke();
   rect(50, 55, layout.camW - 100, height - 110, 28);
 
-  // Barra de topo / header ligeiramente visível para destacar o título
-  fill(255, 255, 255, 22);
+  fill(255, 255, 255, 16);
   rect(66, 71, layout.camW - 132, 64, 16);
 
   fill(238, 249, 255);
   textAlign(CENTER, TOP);
   textSize(44);
-  const titleY = 88;
-  text("CatchMotion", centerX, titleY);
+  text("CatchMotion", centerX, 88);
 
-  // Espaçamento maior entre título e subtítulo para melhorar leitura
   textSize(19);
   fill(198, 225, 242);
-  text("Sistema de Fisioterapia e Reabilitação", centerX, titleY + 72);
+  text("Sistema de Fisioterapia e Reabilitação", centerX, 145);
 
   desenharSeletorObjetosInicio(centerX, yTema);
 
@@ -84,38 +80,17 @@ function desenharEcraConfiguracao(handInfos) {
   rect(botaoIniciar.x, botaoIniciar.y, botaoIniciar.w, botaoIniciar.h, 14);
   fill(5, 44, 30);
   textSize(27);
-  textAlign(CENTER, CENTER);
-  text("Iniciar", botaoIniciar.x + botaoIniciar.w * 0.5, botaoIniciar.y + botaoIniciar.h * 0.5);
-  // restaurar alinhamento padrão top para restante UI
-  textAlign(CENTER, TOP);
+  text("Iniciar", centerX, yInicio + 20);
 
   desenharSeletorDificuldadeInicio(handInfos, centerX, yDificuldade);
 
-  // Mensagens informativas finais: usar wrapping e leading para melhor leitura
   fill(217, 234, 244);
   textSize(15);
-  textLeading(20);
-  // largura disponível para texto dentro do painel central
-  const infoMaxW = min(620, layout.camW - 220);
-  const infoX = centerX - infoMaxW * 0.5;
-  // posicionar as mensagens abaixo do botão Iniciar para evitar sobreposição
-  // aumentar deslocamento para garantir espaço adicional abaixo do botão
-  const infoY = yInicio + botaoIniciar.h + 36;
-  text(
-    "Clique em Iniciar: aponte para o botão, use o gesto OK, coloque a mão no centro ou diga 'Iniciar' por voz.",
-    infoX,
-    infoY,
-    infoMaxW
-  );
+  text("Clique em Iniciar, aponte para o botão, gesto OK, mão no centro ou voz", centerX, 518);
 
   fill(241, 214, 120);
   textSize(14);
-  text(
-    "Escolha a dificuldade aqui ou no painel lateral. Aproxime a mão da câmara e mantenha-a visível.",
-    infoX,
-    infoY + 46,
-    infoMaxW
-  );
+  text("Escolha dificuldade aqui ou no painel lateral", centerX, 542);
 
   const hasHands = handInfos.length > 0;
   const handInCenter = handInfos.find((h) => {
@@ -188,20 +163,18 @@ function desenharSeletorObjetosInicio(centerX, y) {
   const w = 108;
   const h = 36;
   const gap = 10;
-  // três botões na mesma linha
-  const total = w * 3 + gap * 2;
+  const total = w * 2 + gap;
   const x0 = centerX - total * 0.5;
 
   fill(224, 241, 252);
   textAlign(CENTER, TOP);
   textSize(15);
-  // aumentar espaçamento entre o título e os botões
-  text("Objetos do modo de captura", centerX, y - 42);
+  text("Objetos do modo de captura", centerX, y - 26);
 
   botoesTemaObjetos = [
     { tema: TEMA_OBJETO.BOLAS, x: x0, y, w, h },
-    { tema: TEMA_OBJETO.FRUTAS, x: x0 + (w + gap), y, w, h },
-    { tema: TEMA_OBJETO.PLANETAS, x: x0 + (w + gap) * 2, y, w, h }
+    { tema: TEMA_OBJETO.FRUTAS, x: x0 + w + gap, y, w, h },
+    { tema: TEMA_OBJETO.PLANETAS, x: x0 + w + gap, y: y + 46, w, h }
   ];
 
   desenharBotaoTemaObjeto(botoesTemaObjetos[0], "Bolas");
@@ -209,8 +182,6 @@ function desenharSeletorObjetosInicio(centerX, y) {
   desenharBotaoTemaObjeto(botoesTemaObjetos[2], "Planetas");
 
   botoesFrutasConfig = [];
-  botoesOutrosConfig = [];
-
   if (temaObjetos === TEMA_OBJETO.BOLAS) {
     fill(197, 224, 242);
     textSize(13);
@@ -363,8 +334,7 @@ function desenharAlvoTrajeto() {
 function desenharEcraFinal(handInfos) {
   fill(0, 0, 0, 125);
   noStroke();
-  // ajustar a caixa preta para cobrir um pouco menos a área inferior (reduzida ligeiramente)
-  rect(60, 78, layout.camW - 120, height - 130, 24);
+  rect(60, 78, layout.camW - 120, height - 173, 24);
 
   fill(255);
   textAlign(CENTER, TOP);
@@ -657,49 +627,37 @@ function desenharBotaoDificuldadeFim(btn, label) {
 function desenharPainelDireito(handInfos) {
   push();
   translate(layout.panelX, 0);
-  const blockX = 16;
+
+  const blockX = 14;
   const blockW = layout.panelW - blockX * 2;
 
-  // Background do painel (leve sombra) - deixamos mais discreto
+  fill(5, 20, 34, 228);
   noStroke();
-  fill(6, 22, 34, 220);
-  rect(0, 8, layout.panelW, height - 16, 8);
+  rect(0, 0, layout.panelW, height);
 
-  // Cabeçalho
-  fill(230, 245, 255);
+  fill(255);
   textAlign(LEFT, TOP);
-  textSize(22);
-  text("Painel", 20, 16);
+  textSize(26);
+  text("Painel", 22, 16);
 
-  // Empilhar blocos dinamicamente para evitar sobreposições
-  let curY = 56;
-  const gap = 14;
-
-  // Instruções (reduzido para caber melhor)
-  const instrucoesH = 120;
-  desenharBlocoPainel(blockX, curY, blockW, instrucoesH, "Instruções", obterInstrucaoAtual());
-  curY += instrucoesH + gap;
-
-  // Controlos — passamos a posição atual
-  const controlesH = 260;
-  desenharBlocoControlos(handInfos, blockX, blockW, curY, controlesH);
-  curY += controlesH + gap;
-
-  // Monitorização
-  // Monitorização e Estado/Resultados lado a lado
-  const monitorizacaoH = 180;
-  const resultadosH = 180; // usar mesma altura para alinhamento
-  const sideGap = gap;
-  const sideW = (blockW - sideGap) * 0.5;
-
-  // Monitorização à esquerda
-  desenharBlocoPainel(blockX, curY, sideW, monitorizacaoH, "Monitorização", obterConteudoMonitorizacaoPainel());
-
-  // Estado/Resultados à direita
-  const rightX = blockX + sideW + sideGap;
-  desenharBlocoPainel(rightX, curY, sideW, resultadosH, estadoApp === ESTADO_APP.CONFIG ? "Estado" : "Resultados", obterConteudoResultadosPainel(handInfos));
-
-  curY += Math.max(monitorizacaoH, resultadosH) + gap;
+  desenharBlocoPainel(blockX, 60, blockW, 126, "Instruções", obterInstrucaoAtual());
+  desenharBlocoControlos(handInfos, blockX, blockW);
+  desenharBlocoPainel(
+    blockX,
+    456,
+    blockW,
+    118,
+    "Monitorização",
+    obterConteudoMonitorizacaoPainel()
+  );
+  desenharBlocoPainel(
+    blockX,
+    586,
+    blockW,
+    78,
+    estadoApp === ESTADO_APP.CONFIG ? "Estado" : "Resultados",
+    obterConteudoResultadosPainel(handInfos)
+  );
 
   pop();
 }
@@ -714,6 +672,8 @@ function obterConteudoMonitorizacaoPainel() {
       NOMES_DIFICULDADE[nivelDificuldade] +
       "\nTema: " +
       obterNomeTemaObjetos() +
+      "\nSelecao: " +
+      obterResumoSelecaoObjetos() +
       "\nDuração: " +
       floor(DURACAO_EXERCICIO_POR_DIFICULDADE[nivelDificuldade] / 60) +
       " min"
@@ -768,23 +728,31 @@ function desenharBlocoPainel(x, y, w, h, title, content) {
 }
 
 // Bloco de botões (reiniciar/terminar) e seletor de dificuldade.
-function desenharBlocoControlos(handInfos, x, w, y, h) {
-  // Recebe posição y e altura h para encaixar dinamicamente no painel
+function desenharBlocoControlos(handInfos, x, w) {
+  const y = 200;
+  const h = 246;
+
   fill(255, 255, 255, 48);
   noStroke();
   rect(x, y, w, h, 14);
 
   fill(246);
-  textSize(18);
+  textSize(19);
   textAlign(LEFT, TOP);
   text("Controlos", x + 12, y + 10);
 
-  const sidePad = 12;
-  const gap = 12;
+  const sidePad = 10;
+  const gap = 10;
   const btnW = (w - sidePad * 2 - gap) * 0.5;
-  const btnH = 64;
-  const restartBtn = { x: x + sidePad, y: y + 46, w: btnW, h: btnH, key: "restart" };
-  const finishBtn = { x: x + sidePad + btnW + gap, y: y + 46, w: btnW, h: btnH, key: "finish" };
+  const btnH = 62;
+  const restartBtn = { x: x + sidePad, y: y + 40, w: btnW, h: btnH, key: "restart" };
+  const finishBtn = {
+    x: x + sidePad + btnW + gap,
+    y: y + 40,
+    w: btnW,
+    h: btnH,
+    key: "finish"
+  };
 
   botoesPainel.restart = {
     x: layout.panelX + restartBtn.x,
@@ -799,13 +767,11 @@ function desenharBlocoControlos(handInfos, x, w, y, h) {
     h: finishBtn.h
   };
 
-  // calcular o Y do seletor a partir da base dos botões com espaço extra
-  const controlsBottom = y + 46 + btnH; // base dos botões
-  const selectorY = controlsBottom + 26; // espaço adicional entre botões e dificuldade
+  const selectorY = y + 122;
   const selectorGap = 10;
-  const selectorPad = 12;
+  const selectorPad = 10;
   const selectorBtnW = (w - selectorPad * 2 - selectorGap * 2) / 3;
-  const selectorBtnH = 26;
+  const selectorBtnH = 22;
   botoesDificuldade = [
     {
       level: DIFICULDADE.FACIL,
@@ -882,10 +848,10 @@ function desenharBlocoControlos(handInfos, x, w, y, h) {
   desenharBotaoSeletorDificuldade(botoesDificuldade[1], "Médio", podeMudarDificuldade);
   desenharBotaoSeletorDificuldade(botoesDificuldade[2], "Difícil", podeMudarDificuldade);
 
-  const temaY = selectorY + 64;
-  const temaGap = 10;
+  const temaY = selectorY + 45;
+  const temaGap = 8;
   const temaBtnW = (w - selectorPad * 2 - temaGap) / 2;
-  const temaBtnH = 28;
+  const temaBtnH = 24;
   botoesTemaObjetosPainel = [
     {
       tema: TEMA_OBJETO.BOLAS,
@@ -902,11 +868,10 @@ function desenharBlocoControlos(handInfos, x, w, y, h) {
       h: temaBtnH
     },
     {
-      // Fazer o botão 'Planetas' ocupar a largura total interna (encaixa melhor)
       tema: TEMA_OBJETO.PLANETAS,
-      x: layout.panelX + x + selectorPad,
+      x: layout.panelX + x + selectorPad + temaBtnW + temaGap,
       y: temaY + temaBtnH + 6,
-      w: w - selectorPad * 2,
+      w: temaBtnW,
       h: temaBtnH
     }
   ];
@@ -919,7 +884,6 @@ function desenharBlocoControlos(handInfos, x, w, y, h) {
   const podeMudarTema = true;
   desenharBotaoTemaPainel(botoesTemaObjetosPainel[0], "Bolas", podeMudarTema);
   desenharBotaoTemaPainel(botoesTemaObjetosPainel[1], "Frutas", podeMudarTema);
-  // "Outros" removido
   desenharBotaoTemaPainel(botoesTemaObjetosPainel[2], "Planetas", podeMudarTema);
 
   if (estadoApp !== ESTADO_APP.EXERCISE) {
@@ -1174,10 +1138,6 @@ function desenharPopupSelecaoObjetos() {
   } else if (popupTemaSelecionado === TEMA_OBJETO.PLANETAS) {
     catalogo = obterCatalogoTemaAtual();
     selecionados = planetasSelecionados;
-  } else {
-    // fallback: usar catalogo atual (bolas não tem popup normalmente)
-    catalogo = obterCatalogoTemaAtual();
-    selecionados = [];
   }
 
   if (!catalogo.length) {
