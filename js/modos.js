@@ -19,6 +19,7 @@ function executarExercicio(handInfos) {
 
 function obterNomeTemaObjetos() {
   if (temaObjetos === TEMA_OBJETO.FRUTAS) return "Frutas";
+  if (temaObjetos === TEMA_OBJETO.OUTROS) return "Outros";
   if (temaObjetos === TEMA_OBJETO.PLANETAS) return "Planetas";
   return "Bolas";
 }
@@ -27,6 +28,9 @@ function obterCatalogoTemaAtual() {
   if (temaObjetos === TEMA_OBJETO.FRUTAS) {
     return CATALOGO_FRUTAS.filter((item) => !!atlasObjetos[item.id]);
   }
+  if (temaObjetos === TEMA_OBJETO.OUTROS) {
+    return CATALOGO_OUTROS.filter((item) => !!atlasObjetos[item.id]);
+  }
   if (temaObjetos === TEMA_OBJETO.PLANETAS) {
     return CATALOGO_PLANETAS.filter((item) => !!atlasObjetos[item.id]);
   }
@@ -34,7 +38,7 @@ function obterCatalogoTemaAtual() {
 }
 
 function obterCatalogoCompletoObjetos() {
-  return [...CATALOGO_FRUTAS, ...CATALOGO_PLANETAS];
+  return [...CATALOGO_FRUTAS, ...CATALOGO_OUTROS, ...CATALOGO_PLANETAS];
 }
 
 function obterDefinicaoObjetoPorId(id) {
@@ -58,6 +62,7 @@ function carregarImagensObjetos() {
 
 function obterSelecaoTemaAtual() {
   if (temaObjetos === TEMA_OBJETO.FRUTAS) return frutasSelecionadas;
+  if (temaObjetos === TEMA_OBJETO.OUTROS) return outrosSelecionados;
   if (temaObjetos === TEMA_OBJETO.PLANETAS) return planetasSelecionados;
   return [];
 }
@@ -88,7 +93,9 @@ function alternarObjetoSelecao(id, categoria) {
   const alvo = categoria === TEMA_OBJETO.FRUTAS 
     ? frutasSelecionadas 
     : categoria === TEMA_OBJETO.PLANETAS 
-    ? planeta
+    ? planetasSelecionados 
+    : outrosSelecionados;
+  
   const jaSelecionado = alvo.includes(id);
 
   if (jaSelecionado) {
@@ -105,11 +112,17 @@ function alternarObjetoSelecao(id, categoria) {
 
 function garantirSelecaoObjetosValida() {
   const frutasDisponiveis = CATALOGO_FRUTAS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
+  const outrosDisponiveis = CATALOGO_OUTROS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
   const planetasDisponiveis = CATALOGO_PLANETAS.filter((item) => !!atlasObjetos[item.id]).map((item) => item.id);
 
   frutasSelecionadas = frutasSelecionadas.filter((id) => frutasDisponiveis.includes(id));
   if (!frutasSelecionadas.length && frutasDisponiveis.length) {
     frutasSelecionadas = [frutasDisponiveis[0]];
+  }
+
+  outrosSelecionados = outrosSelecionados.filter((id) => outrosDisponiveis.includes(id));
+  if (!outrosSelecionados.length && outrosDisponiveis.length) {
+    outrosSelecionados = [outrosDisponiveis[0]];
   }
 
   planetasSelecionados = planetasSelecionados.filter((id) => planetasDisponiveis.includes(id));

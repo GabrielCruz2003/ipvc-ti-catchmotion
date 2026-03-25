@@ -19,6 +19,7 @@ const MODO = {
 const TEMA_OBJETO = {
   BOLAS: "bolas",
   FRUTAS: "frutas",
+  OUTROS: "outros",
   PLANETAS: "planetas"
 };
 
@@ -30,6 +31,14 @@ const CATALOGO_FRUTAS = [
   { id: "limao", label: "Limão", categoria: "frutas", ficheiro: "Limão.svg" },
   { id: "maca", label: "Maçã", categoria: "frutas", ficheiro: "Maça.svg" },
   { id: "uvas", label: "Uvas", categoria: "frutas", ficheiro: "Uvas.svg" }
+];
+
+const CATALOGO_OUTROS = [
+  { id: "estrela", label: "Estrela", categoria: "outros", ficheiro: "estrela.svg" },
+  { id: "diamante", label: "Diamante", categoria: "outros", ficheiro: "diamante.svg" },
+  { id: "raio", label: "Raio", categoria: "outros", ficheiro: "raio.svg" },
+  { id: "alvo", label: "Alvo", categoria: "outros", ficheiro: "alvo.svg" },
+  { id: "foguete", label: "Foguete", categoria: "outros", ficheiro: "foguete.svg" }
 ];
 
 const CATALOGO_PLANETAS = [
@@ -99,6 +108,7 @@ let indiceModo = 0;
 let nivelDificuldade = DIFICULDADE.MEDIO;
 let temaObjetos = TEMA_OBJETO.BOLAS;
 let frutasSelecionadas = ["banana", "laranja", "maca"];
+let outrosSelecionados = ["estrela", "diamante", "raio"];
 let planetasSelecionados = ["mercurio", "venus", "terra"];
 
 let inicioMillis = 0;
@@ -158,6 +168,7 @@ let botoesDificuldadeInicio = [];
 let botoesDificuldadeFim = [];
 let botoesTemaObjetos = [];
 let botoesFrutasConfig = [];
+let botoesOutrosConfig = [];
 let botoesTemaObjetosPainel = [];
 
 let reconhecedorVoz = null;
