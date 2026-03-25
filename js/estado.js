@@ -95,9 +95,10 @@ const PERFIL_DIFICULDADE = [
 const layout = {
   totalW: 1560,
   totalH: 675,
-  camW: 1200,
-  panelW: 360,
-  panelX: 1200,
+  // Aumentar largura do painel lateral para melhor legibilidade
+  panelW: 420,
+  camW: 1560 - 420, // 1140
+  panelX: 1560 - 420,
   framePad: 20
 };
 

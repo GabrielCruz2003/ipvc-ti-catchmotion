@@ -290,8 +290,8 @@ function mousePressed() {
   if (estadoApp === ESTADO_APP.CONFIG && botoesTemaObjetos.length) {
     const clickedTema = botoesTemaObjetos.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
     if (clickedTema) {
-      // Abrir popup se for Frutas, Outros ou Planetas
-      if (clickedTema.tema === TEMA_OBJETO.FRUTAS || clickedTema.tema === TEMA_OBJETO.OUTROS || clickedTema.tema === TEMA_OBJETO.PLANETAS) {
+      // Abrir popup apenas para Frutas ou Planetas ("Outros" removido)
+      if (clickedTema.tema === TEMA_OBJETO.FRUTAS || clickedTema.tema === TEMA_OBJETO.PLANETAS) {
         popupObjetoAberto = true;
         popupTemaSelecionado = clickedTema.tema;
       }
@@ -308,13 +308,7 @@ function mousePressed() {
     }
   }
 
-  if (estadoApp === ESTADO_APP.CONFIG && temaObjetos === TEMA_OBJETO.OUTROS && botoesOutrosConfig.length) {
-    const clickedOutro = botoesOutrosConfig.find((btn) => pontoDentroRetangulo(mouseX, mouseY, btn));
-    if (clickedOutro) {
-      alternarObjetoSelecao(clickedOutro.id, TEMA_OBJETO.OUTROS);
-      return;
-    }
-  }
+  // "Outros" removido: não existem botoesOutrosConfig nem seleção associada
 
   if (estadoApp === ESTADO_APP.EXERCISE) {
     const geoCamara =
