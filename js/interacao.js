@@ -422,7 +422,7 @@ function iniciarReconhecimentoVoz() {
 
   reconhecedorVoz.onstart = () => {
     vozPronta = true;
-    estadoVoz = "A escutar em Português (Portugal)";
+    estadoVoz = "A escutar em PT-PT";
   };
 
   reconhecedorVoz.onend = () => {
@@ -433,7 +433,7 @@ function iniciarReconhecimentoVoz() {
         reconhecedorVoz.start();
       } catch (error) {
         // Evita desligar de vez em erros transitórios (ex.: invalid state).
-        estadoVoz = "A escutar em Português (Portugal)";
+        estadoVoz = "A escutar em PT-PT";
       }
     }, 220);
   };
@@ -487,7 +487,7 @@ function processarComandoVoz(textoNormalizado) {
     return;
   }
 
-  estadoVoz = "A escutar em Português (Portugal)";
+  estadoVoz = "A escutar em PT-PT";
 }
 
 function tentarIniciarReconhecedorVoz() {
