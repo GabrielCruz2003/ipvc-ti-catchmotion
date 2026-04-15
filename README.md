@@ -1,59 +1,69 @@
-# CatchMotion
+# CatchMotion 🖐️🎯
 
-Aplicação interativa para apoio a exercícios de fisioterapia motora, com deteção de mãos em tempo real e comandos de voz em português.
+**CatchMotion** é uma aplicação interativa concebida para apoiar exercícios de fisioterapia motora. Através da utilização de visão computacional e reconhecimento de voz, a aplicação transforma a reabilitação num jogo dinâmico, permitindo que os utilizadores realizem exercícios de mobilidade de forma lúdica e recebam feedback em tempo real.
 
-## Funcionalidades
+---
 
-- Modo de exercício implementado: Apanhar Bolas
-- Três níveis de dificuldade: Fácil, Médio e Difícil
-- Deteção de mãos via câmara (gestos e seguimento do dedo indicador)
-- Comandos de voz (pt-PT): iniciar, terminar e reiniciar
-- Feedback visual em tempo real (estado, dicas e métricas)
+## 🚀 Funcionalidades Principais
 
-## Tecnologias
+### 🖐️ Interação Natural (HandPose)
+A aplicação utiliza a câmara para mapear os movimentos do utilizador sem necessidade de comandos físicos:
+- **Seguimento de Precisão:** Deteta o dedo indicador para interagir com os elementos no ecrã.
+- **Deteção de Gestos:** Reconhece movimentos específicos para selecionar opções e realizar o exercício.
 
-- HTML5
-- CSS3
-- JavaScript
-- p5.js
-- ml5.js (HandPose)
-- Web Speech API
+### 🗣️ Comandos de Voz (Web Speech API)
+Controlo total do fluxo da aplicação através da voz, ideal para utilizadores com mobilidade reduzida nas mãos:
+- **"Iniciar":** Começa o exercício a partir do ecrã inicial.
+- **"Terminar":** Interrompe a sessão atual.
+- **"Reiniciar":** Volta a tentar o exercício após ver os resultados.
 
-## Estrutura do projeto
+### 📈 Modo de Exercício: Apanhar Bolas
+- **Dificuldade Adaptativa:** Três níveis (Fácil, Médio e Difícil) que ajustam a velocidade e o tamanho dos alvos.
+- **Feedback em Tempo Real:** Visualização de métricas, dicas de postura e estado do exercício diretamente na interface.
 
-- `index.html` - página principal e carregamento de scripts
-- `styles.css` - estilos da interface
-- `sketch.js` - ciclo principal (setup/draw)
-- `js/estado.js` - estado global, constantes e configuração
-- `js/interacao.js` - input (mão, rato, teclado e voz)
-- `js/modos.js` - lógica dos modos de jogo
-- `js/renderizacao.js` - desenho da interface e elementos visuais
+---
 
-## Como executar
+## 🛠️ Tecnologias Utilizadas
 
-1. Abrir a pasta do projeto no VS Code.
-2. Iniciar um servidor local na pasta raiz (ex.: extensão Live Server).
-3. Abrir a aplicação no navegador através do endereço local (ex.: `http://localhost:5500`).
-4. Permitir acesso à câmara e ao microfone quando solicitado.
+- **Linguagens:** HTML5, CSS3, JavaScript.
+- **Gráficos e Ciclo de Jogo:** [p5.js](https://p5js.org/).
+- **Inteligência Artificial:** [ml5.js](https://ml5js.org/) (Modelo HandPose para deteção de mãos).
+- **Voz:** Web Speech API para reconhecimento de comandos em português (pt-PT).
 
-Também é possível abrir o `index.html` diretamente, mas algumas funcionalidades de câmara/voz podem depender do navegador e do contexto seguro (`localhost` ou `https`).
+---
 
-## Controlos rápidos
+## 📦 Como Executar
 
-- Teclado:
-	- `1`, `2`, `3` definem dificuldade
-	- `Enter` inicia no ecrã inicial
-- Voz:
-	- "iniciar" (ecrã inicial)
-	- "terminar" (durante exercício)
-	- "reiniciar" (ecrã final)
-- Rato e gestos:
-	- Seleção de botões e dificuldade através da interface
+1. **Clonar/Descarregar:** Transfere os ficheiros do projeto para a tua máquina.
+2. **Servidor Local:** Abre a pasta no VS Code e utiliza a extensão **Live Server** (essencial para permissões de câmara/microfone).
+3. **Navegador:** Acede a `http://localhost:5500`.
+4. **Permissões:** Aceita o acesso à **Câmara** e ao **Microfone** quando o navegador solicitar.
 
-## Estado atual
+> **Nota:** Se abrir o ficheiro `index.html` diretamente (file://), algumas funcionalidades de voz podem ser bloqueadas por segurança pelo navegador.
 
-Nesta versão, apenas o modo **Apanhar Bolas** está considerado como funcionalidade concluída.
+---
 
-## Objetivo académico
+## 📖 Instruções de Uso
 
-Projeto desenvolvido no contexto da unidade curricular de Tecnologias Interativas, com foco em interação natural (visão computacional + voz) aplicada à reabilitação motora.
+1. **Configuração:** No ecrã inicial, seleciona a dificuldade usando as teclas `1`, `2` ou `3`, ou clicando nos botões.
+2. **Controlo por Teclado:** - `Enter`: Inicia o exercício.
+3. **Interação Gestual:**
+   - Move a mão em frente à câmara; o círculo no ecrã seguirá o teu dedo indicador.
+   - Posiciona o cursor sobre as bolas para as "apanhar".
+4. **Voz:** Diz claramente os comandos "iniciar", "terminar" ou "reiniciar" conforme a fase do exercício.
+
+---
+
+## 📂 Estrutura do Projeto
+
+* `sketch.js`: Gestão do ciclo principal (setup e desenho).
+* `js/estado.js`: Controlo de variáveis globais e configurações.
+* `js/interacao.js`: Gestão de inputs (mão, voz, rato e teclado).
+* `js/modos.js`: Lógica específica do jogo "Apanhar Bolas".
+* `js/renderizacao.js`: Interface gráfica e elementos visuais.
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins académicos no âmbito da unidade curricular de **Tecnologias Interativas**, com foco no estudo de interfaces de utilizador naturais (NUI) aplicadas à saúde.
